@@ -1,25 +1,53 @@
 import { Trash, SquarePen } from "lucide-react";
+import ActionLoader from "../../../components/Loader/ActionLoader";
 
-const VehicleCard = ({ v, handleDeleteVehicle, update }) => {
+const VehicleCard = ({ v, handleDeleteVehicle, update, deletePending, deleteId }) => {
 
-
+    const deleting = deletePending && deleteId === v._id
     return (
-        <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200 grid grid-cols-3">
-            <h3 className="text-lg font-semibold text-gray-800 col-span-2">
+        <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl shadow-md p-4 border border-gray-200 flex flex-col items-center gap-y-3">
+            <h3 className="text-lg font-semibold text-gray-800 w-full text-center">
                 {v.vehicleNumber}
             </h3>
-            <div className='flex justify-center items-center gap-x-3 cursor-pointer'>
-                <button className="text-green-700" onClick={() => update(v)}>
-                    <SquarePen size={18} />
-                </button>
-                <button className="text-red-700 cursor-pointer" onClick={() => handleDeleteVehicle(v._id)}>
-                    <Trash size={18} />
-                </button>
 
-            </div>
+
+            {deleting ?
+                <div className="flex justify-center items-center py-2 ">
+                    <ActionLoader />
+                </div> :
+
+                <div className='flex justify-center items-center gap-x-3 '>
+                    <button disabled={deletePending} className="text-green-700"
+                        style={{
+                            cursor: deletePending ? "not-allowed" : "pointer"
+                        }}
+                        onClick={() => update(v)}>
+                        <SquarePen size={18} />
+                    </button>
+                    <button disabled={deletePending} className="text-red-700 "
+                        style={{
+                            cursor: deletePending ? "not-allowed" : "pointer"
+                        }}
+                        onClick={() => handleDeleteVehicle(v._id)}>
+                        <Trash size={18} />
+                    </button>
+
+                </div>
+            }
 
         </div>
     );
 };
 
 export default VehicleCard;
+
+
+
+
+
+
+
+
+

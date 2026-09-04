@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { handleAddAction, handleGetAction, handlDeleteAction, handleUpdateAction } from "../state/driver.actions";
-import { useDispatch } from "react-redux";
+
 
 const useDriverHook = () => {
-    const dispatch = useDispatch();
 
     // Form show or hide 
     const [open, setOpen] = useState(null);
@@ -23,6 +21,9 @@ const useDriverHook = () => {
         driverName: "",
         driverNumber: ""
     };
+
+    const [files, setFiles] = useState(null);
+    const [progress, setProgress] = useState(0);
 
 
 
@@ -74,46 +75,23 @@ const useDriverHook = () => {
     }
 
 
-    // submit form fn 
-    const handleSubmitForm = (data) => {
-        dispatch(handleAddAction(data))
-        CloseForm();
-    }
-
-    // hydrating fn 
-    const hydrating = () => {
-        dispatch(handleGetAction());
-    }
-
-
-    // DeleteDriver
-    const handleDeleteDriver = (id) => {
-        dispatch(handlDeleteAction(id))
-    }
-
-    // update 
-    const handleUpdate = (payload) => {
-        dispatch(handleUpdateAction({ ...payload, _id: updatedId._id }));
-        CloseForm();
-    }
-
-
     const SetUpdatedData = (data) => {
         setUpdatedId(data);
         setOpen(true);
         reset({
             driverName: data.driverName,
-            driverNumber: data.driverNumber
+            driverNumber: data.driverNumber,
+            _id: data._id
         })
     }
 
 
 
-
     return {
         register, handleSubmit, errors, ExcelDataBox, closeExcelBox, OpenExcelBox, openFilePopup
-        , openFileBox, OpenForm, CloseForm, handleSubmitForm, open, hydrating, handleDeleteDriver,
-        SetUpdatedData, handleUpdate, updatedId
+        , openFileBox, OpenForm, CloseForm, open,
+        SetUpdatedData, updatedId, closeFileBox, setFiles, files,
+        progress, setProgress
     }
 
 

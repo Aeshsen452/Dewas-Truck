@@ -1,7 +1,7 @@
 import { FileSpreadsheet, X } from "lucide-react";
 
 const FileUploading = ({
-    file,
+    file = 18076,
     progress = 0,
     onCancel,
 }) => {
@@ -10,7 +10,7 @@ const FileUploading = ({
     const fileSize = (file.size / 1024 / 1024).toFixed(2);
 
     return (
-        <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-5 shadow-lg">
+        <div className="w-full max-w-md h-60 rounded-2xl border  border-gray-200 bg-white p-5 shadow-lg">
 
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
@@ -47,7 +47,7 @@ const FileUploading = ({
 
                 <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-gray-700">
-                        {file.name}
+                        {file.name || "Driver Excels"}
                     </p>
 
                     <p className="mt-0.5 text-xs text-gray-400">

@@ -6,18 +6,17 @@ export const addRouteApi = async (payload) => {
         return data
 
     } catch (error) {
-        return error.response.data.message || "Something went wrong"
+        throw error
     }
 }
 
 
-export const getRoutesApi = async () => {
+export const getRoutesApi = async (api) => {
     try {
-        const { data } = await AxiosInstance.get("/route");
-        return data;
-
+        const { data } = await AxiosInstance.get(api);
+        return data.data;
     } catch (error) {
-        return error.response.data.message || "Something went wrong"
+        throw error
     }
 }
 
@@ -28,7 +27,7 @@ export const deleteRouteApi = async (id) => {
         const { data } = await AxiosInstance.delete(`/route/${id}`);
         return data
     } catch (error) {
-        return error.response.data.message || "Something went wrong"
+        throw error
     }
 }
 
@@ -39,6 +38,24 @@ export const editRouteApi = async (payload) => {
         const { data } = await AxiosInstance.patch(`/route`, payload);
         return data;
     } catch (error) {
-        return error.response.data.message || "Something went wrong"
+        throw error
+    }
+}
+
+export const bullAddRouteApi = async (File, setprogress) => {
+    try {
+        const formData = new FormData();
+        formData.append("ExcelFile", File);
+
+        const { data } = await AxiosInstance.post("/route/bulk", formData, {
+            onUploadProgress: ({ loaded, total }) => {
+                const per = Math.round(loaded * 100 / total);
+                setprogress(per)
+            }
+        })
+        return data
+
+    } catch (error) {
+        throw error
     }
 }

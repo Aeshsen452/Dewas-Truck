@@ -1,9 +1,12 @@
 
 import { useState } from "react";
+import { Download, Trash, FilePenLine } from "lucide-react"
+import ActionLoader from "../../../components/Loader/ActionLoader";
 
-export default function TripCard({ data }) {
+export default function TripCard({ data, handleDelete, deletePending, deleteId, handleSetUpdate }) {
     const [showPayroll, setShowPayroll] = useState(false);
 
+    const deleting = deletePending && deleteId === data._id
 
     // const data = {
     //     date: "2026-08-27",
@@ -55,7 +58,9 @@ export default function TripCard({ data }) {
 
 
     return (
-        <div className="w-full  overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full  overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
             {/* Header */}
             <div className="border-b border-gray-100 bg-gray-50 px-5 py-4">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -97,14 +102,19 @@ export default function TripCard({ data }) {
                             RPS: {data.rps}
                         </span>
 
-                        <span
-                            className={`rounded-full px-3 py-1 text-xs font-semibold ${data.loadStatus === "Early"
-                                ? "bg-green-50 text-green-700"
-                                : "bg-red-50 text-red-700"
-                                }`}
-                        >
-                            Loading: {data.loadStatus}
-                        </span>
+
+                        {data.loadStatus &&
+
+                            <span
+                                className={`rounded-full px-3 py-1 text-xs font-semibold ${data.loadStatus === "Early"
+                                    ? "bg-green-50 text-green-700"
+                                    : "bg-red-50 text-red-700"
+                                    }`}
+                            >
+                                Loading Status : {data.loadStatus}
+                            </span>
+
+                        }
 
                         <span
                             className={`rounded-full px-3 py-1 text-xs font-semibold ${data.payroll.tripStatus === "Late"
@@ -112,7 +122,7 @@ export default function TripCard({ data }) {
                                 : "bg-green-50 text-green-700"
                                 }`}
                         >
-                            Trip: {data.payroll.tripStatus}
+                            Trip Status : {data.payroll.tripStatus}
                         </span>
                     </div>
                 </div>
@@ -146,15 +156,23 @@ export default function TripCard({ data }) {
                         value={formatDateTime(data.inTime)}
                     />
 
-                    <TimeItem
-                        label="Unload Time"
-                        value={formatDateTime(data.unloadTime)}
-                    />
+                    {data.touchingPoint &&
 
-                    <TimeItem
-                        label="Load Time"
-                        value={formatDateTime(data.loadTime)}
-                    />
+                        <TimeItem
+                            label="Unload Time"
+                            value={formatDateTime(data.unloadTime)}
+                        />
+
+                    }
+
+                    {data.touchingPoint &&
+
+                        <TimeItem
+                            label="Load Time"
+                            value={formatDateTime(data.loadTime)}
+                        />
+                    }
+
                 </div>
 
                 {/* Time Stats */}
@@ -164,21 +182,27 @@ export default function TripCard({ data }) {
                         value={`${data.givenHour}h ${data.givenMinutes}m`}
                     />
 
-                    <StatBox
-                        label="Load Time"
-                        value={`${data.loadhour}h ${data.loadminute}m`}
-                    />
 
-                    <StatBox
-                        label="Loaded Time Taken"
-                        value={data.loadedTimeTaken}
-                    />
+                    {data.touchingPoint &&
+                        <StatBox
+                            label="Given Load Time"
+                            value={`${data.loadhour}h ${data.loadminute}m`}
+                        />
 
-                    <StatBox
-                        label="Time Difference"
-                        value={data.loadedTimeDifference}
-                        color="green"
-                    />
+                    } {data.touchingPoint &&
+                        <StatBox
+                            label="Loaded Time Taken"
+                            value={data.loadedTimeTaken}
+                        />
+
+                    } {data.touchingPoint &&
+
+                        <StatBox
+                            label=" Load-Unload Time Difference"
+                            value={data.loadedTimeDifference}
+                            color="green"
+                        />
+                    }
                 </div>
 
                 {/* Payroll Toggle */}
@@ -258,6 +282,46 @@ export default function TripCard({ data }) {
                     </div>
                 )}
             </div>
+
+
+            {/* actions buttons  */}
+
+            {
+                deleting ?
+
+
+                    <div className="p-5 flex justify-center items-center">
+                        <ActionLoader />
+                    </div>
+                    :
+                    <div className="p-5 flex justify-center items-center gap-x-5">
+                        <button className="cursor-pointer"
+                            style={{
+                                cursor: deletePending ? "not-allowed" : "pointer"
+                            }}
+                            disabled={deletePending}
+                            onClick={() => handleSetUpdate(data)}
+
+                        >
+                            <FilePenLine className="text-green-700" />
+                        </button>
+                        <button style={{
+                            cursor: deletePending ? "not-allowed" : "pointer"
+                        }}
+                            disabled={deletePending}
+                            onClick={() => handleDelete(data._id)}
+                        >
+                            <Trash className="text-red-700" />
+                        </button>
+                        <button style={{
+                            cursor: deletePending ? "not-allowed" : "pointer"
+                        }}
+                            disabled={deletePending}>
+                            <Download className="text-blue-700" />
+                        </button>
+                    </div>
+            }
+
         </div>
     );
 }

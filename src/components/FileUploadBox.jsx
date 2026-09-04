@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { Upload, X, FileText } from "lucide-react";
+import { toast } from "react-toastify";
 
 
-const FileUploadPopup = ({ onClose, onUpload,filesrc }) => {
+const FileUploadPopup = ({ onClose, onUpload, filesrc }) => {
     const inputRef = useRef(null);
     const [file, setFile] = useState(null);
 
@@ -16,6 +17,10 @@ const FileUploadPopup = ({ onClose, onUpload,filesrc }) => {
 
     const handleUpload = () => {
         if (!file) return;
+        if (file.size === 0) {
+            toast.warning("Selected file is empty")
+            return onClose();
+        }
         onUpload?.(file);
         onClose();
     };

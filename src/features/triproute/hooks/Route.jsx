@@ -1,16 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { addRoute, removeRoute, editRoute, setvalue } from "../state/RouteState";
-import { useDispatch } from 'react-redux';
-import { addRouteApi, getRoutesApi, deleteRouteApi, editRouteApi } from "../api/routesapi";
-import { toast } from "react-toastify";
 import { scrollTop } from "../../../utils/Scroll";
 
 
 const useRoute = () => {
     const [openAddingBox, setOpenBox] = useState(false);
     const [updateId, setUpdateId] = useState(null);
-    const [loading, setloading] = useState(false)
 
 
     const emptyForm = {
@@ -44,10 +39,6 @@ const useRoute = () => {
         }
 
     );
-    const dispatch = useDispatch();
-
-
-
 
 
     // closing header tab 
@@ -56,71 +47,6 @@ const useRoute = () => {
         setUpdateId(null);
         reset(emptyForm);
     }
-
-
-    // All are Apis 
-
-
-    //  calling adding api  
-    const handleRoute = async (data) => {
-        try {
-            const response = await addRouteApi(data);
-            dispatch(addRoute(response.data));
-            toast.success(response.message);
-            reset(emptyForm);
-            setOpenBox(false)
-        } catch (error) {
-            toast.error(error)
-        }
-    }
-
-    // calling delete apis 
-    const handleDelete = async (id) => {
-        try {
-            setloading(true)
-            const response = await deleteRouteApi(id)
-            dispatch(removeRoute(response.data._id))
-            toast.success(response.message);
-        } catch (error) {
-            toast.error(error)
-        } finally {
-            setloading(false)
-        }
-
-    }
-
-    //  calling update apis 
-    const handleUpdateRoute = async (data) => {
-
-        try {
-            const response = await editRouteApi(data);
-            dispatch(editRoute(response.data))
-            setUpdateId(null);
-            reset(emptyForm);
-            setOpenBox(false);
-            toast.success(response.message);
-
-        } catch (error) {
-            toast.error(error)
-        }
-
-    }
-
-    // getting all Data 
-    const hydratingRoutes = async () => {
-        try {
-            setloading(true)
-            const { data } = await getRoutesApi();
-            dispatch(setvalue(data));
-
-        } catch (error) {
-            console.log(error);
-
-        } finally {
-            setloading(false)
-        }
-    }
-
 
 
 
@@ -165,33 +91,24 @@ const useRoute = () => {
 
 
 
-
-
-
     return {
         register,
-        reset,
         errors,
         handleSubmit,
-        handleRoute,
         openAddingBox,
-        setOpenBox, handleDelete,
+        setOpenBox,
         setUpdateId,
         updateId,
-        handleUpdateRoute,
         setUpData,
-        hydratingRoutes,
-        loading,
         scrollTop,
         Closing,
-
-
         closeExcelBox,
         OpenExcelBox,
         openFileBox,
         closeFileBox,
         handleExcelFile,
-        openFilePopup, ExcelDataBox
+        openFilePopup,
+        ExcelDataBox
     }
 
 

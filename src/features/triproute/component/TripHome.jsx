@@ -1,18 +1,20 @@
 
 import useRoute from "../hooks/Route";
-import { useSelector } from "react-redux";
 import TripCard from "./TripCard";
 import DataNotFound from "../../../components/NotFound";
-import { useEffect, useState } from "react";
-import Pagination from "../../../components/Pagination";
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
 import { ArrowBigUpDash, Menu, Upload, Download } from "lucide-react";
+import SearchBar from "../../../components/SearchBar";
+import { useGetRoute, useAddRoute, useDeleteRoute, useUpdateRoute, useBulkAddRoute } from "../hooks/route.hooks";
+import FileUploadPopup from "../../../components/FileUploadBox";
+import routeExcelSample from "../../../../public/routeExcelSample.PNG";
+import FileUploading from "../../../components/FileuploadingLoader";
 
 const TripHome = () => {
 
-  const { register, reset, errors, handleSubmit, handleRoute,
-    openAddingBox, setOpenBox, Closing, handleDelete, setUpdateId,
-    updateId, handleUpdateRoute, setUpData, hydratingRoutes, loading,
+  const { register, errors, handleSubmit,
+    openAddingBox, setOpenBox, Closing, setUpdateId,
+    updateId, handleUpdateRoute, setUpData,
     scrollTop,
     closeExcelBox,
     OpenExcelBox,
@@ -22,77 +24,74 @@ const TripHome = () => {
     openFilePopup, ExcelDataBox
   } = useRoute();
 
-  // getting data from redux state 
-  const RouteWayData = useSelector((state) => state.routeway.value);
 
+  const { data, isPending, error, search, setSearch } = useGetRoute();
+  const { createMutate, createPending } = useAddRoute();
+  const { updateMutate, updatePending } = useUpdateRoute();
+  const { deleteMutate, deletePending, deleteId } = useDeleteRoute();
+  const { bulkMutate, bulkPending, excelFile, progress } = useBulkAddRoute();
 
-
-
-
-
-
-
-  //  calling oneTime to Set data in state
-
-  useEffect(() => {
-    hydratingRoutes()
-  }, [])
-
-
-  if (loading) {
-    return <div className="w-full h-[80vh] flex justify-center items-center">
-      <DataFetchingSpinner />
-    </div>
-  }
 
 
   return (
-    <div className="flex flex-col items-center justify-center bg-slate-100 p-6 ">
+    < div className="flex flex-col relative min-h-full items-center justify-center bg-slate-100 p-6 " >
+
+      {/* header portion  */}
+
       <div className=" w-full">
-        <div className="flex justify-end items-center p-3 ">
+
+        <div className="flex justify-between items-center p-3 gap-x-5  relative">
+          <div className="flex-1">
+            <SearchBar search={search} setSearch={setSearch} />
+          </div>
+
+          <div className="flex-1  flex justify-end items-center p-3 gap-x-5  relative">
+            <div className='relative w-20 flex justify-end  h-10'
+              onMouseEnter={OpenExcelBox}
+              onMouseLeave={closeExcelBox}
+            >
+              <button className='cursor-pointer'>
+                <Menu size={20} className='text-gray-500' />
+              </button>
 
 
+              {ExcelDataBox &&
 
-          <div className='relative w-20 flex justify-end  h-10'
-            onMouseEnter={OpenExcelBox}
-            onMouseLeave={closeExcelBox}
-          >
+                <div className='w-24 h-20 bg-white border border-gray-400 flex flex-col gap-y-2 justify-center items-center absolute top-5 right-7 rounded-b-xl rounded-tl-3xl p-5'
+                >
+                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
+
+                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
 
 
-            <button className='cursor-pointer'>
-              <Menu size={20} className='text-gray-500' />
+                </div>
+              }
+
+            </div>
+
+
+            <button
+              onClick={() => setOpenBox(!openAddingBox)}
+              className="bg-blue-700 p-2 rounded-lg text-white cursor-pointer font-bold">
+
+              {updateId ? "Update Route" : "Add Route"}
+
             </button>
-
-
-            {ExcelDataBox &&
-
-              <div className='w-24 h-20 bg-white border border-gray-400 flex flex-col gap-y-2 justify-center items-center absolute top-5 right-7 rounded-b-xl rounded-tl-3xl p-5'
-              >
-                <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
-
-                <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
-
-
-              </div>
-            }
-
           </div>
 
 
-          <button
-            onClick={() => setOpenBox(!openAddingBox)}
-            className="bg-blue-700 p-2 rounded-lg text-white cursor-pointer font-bold">
-
-            {updateId ? "Update Route" : "Add Route"}
-
-          </button>
         </div>
 
 
         {
           openAddingBox &&
 
-          <form className="bg-white transition" onSubmit={handleSubmit(updateId ? handleUpdateRoute : handleRoute)}>
+          <form className="bg-white transition"
+            onSubmit={handleSubmit(updateId ?
+              (data) => updateMutate(data, { onSuccess: () => Closing() }) : (data) => createMutate(data, { onSuccess: () => Closing() })
+
+
+            )}>
 
             <h1 className="px-5 font-bold text-2xl py-5">
               {updateId ? "Updating Route" : "Adding Route"}
@@ -239,12 +238,26 @@ const TripHome = () => {
 
             <div className="flex justify-end px-5 ">
               <div className="flex gap-x-5 py-5">
-                <button type="button" className="px-3 py-1 rounded  text-white font-semibold cursor-pointer bg-red-700" onClick={Closing}>Cancel</button>
-                <button type="submit" className="px-3 py-1 rounded  text-white font-semibold cursor-pointer bg-green-700">
 
-                  {updateId ? "Save" : "Submit"}
+                <button type="button" className="px-3 py-1 rounded  text-white font-semibold  bg-red-700" onClick={Closing}
+                  disabled={createPending || updatePending || deletePending}
+                  style={{
+                    cursor: (createPending || updatePending || deletePending) ? "not-allowed" : "pointer"
+                  }}
 
+                >Cancel</button>
+
+
+                <button type="submit" className="px-3 py-1 rounded  text-white font-semibold  bg-green-700" disabled={createPending || updatePending || deletePending}
+                  style={{
+                    cursor: (createPending || updatePending) ? "progress" : deletePending ? "not-allowed" : "pointer"
+                  }}
+                >
+
+                  {(createPending || updatePending) ? "please wait" : updateId ? "Save" : "Submit"}
                 </button>
+
+
               </div>
             </div>
 
@@ -255,35 +268,66 @@ const TripHome = () => {
 
 
       </div>
+
+
+
       <div className=" w-full">
+
         {
-          RouteWayData.length > 0 ?
+          isPending ? <div className="w-full h-96 flex justify-center items-center">
+            <DataFetchingSpinner />
+          </div>
 
-            <div className="flex flex-col gap-y-5">
+            :
+            (data && data.length > 0) ?
 
-              <div className="py-5 grid grid-cols-4 gap-3  w-full">
-                {
-                  RouteWayData.map(r => (
-                    <TripCard key={r.id} trip={r} handleDelete={handleDelete} update={setUpData} />
+              <div className="flex flex-col gap-y-5">
 
-                  ))
-                }
+                <div className="py-5 grid grid-cols-1 lg:grid-cols-4 gap-3  w-full">
+                  {
+                    data.map(r => (
+                      <TripCard key={r.id} trip={r}
+                        handleDelete={deleteMutate}
+                        update={setUpData}
+                        updatePending={updatePending}
+                        createPending={createPending}
+                        deletePending={deletePending}
+                        deleteId={deleteId}
+                      />
+
+                    ))
+                  }
+
+                </div>
+
+                {/* <Pagination /> */}
+
+                <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
+
+
 
               </div>
-
-              {/* <Pagination /> */}
-
-              <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
-
-
-
-            </div>
-            :
-            <DataNotFound />
+              :
+              <DataNotFound />
 
         }
 
       </div>
+
+
+      {bulkPending && (
+        <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+          <FileUploading file={excelFile} progress={progress} />
+        </div>
+      )}
+
+      {openFilePopup && (
+        <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+          <FileUploadPopup onClose={closeFileBox} filesrc={routeExcelSample}
+            onUpload={bulkMutate}
+          />
+        </div>
+      )}
 
 
     </div>

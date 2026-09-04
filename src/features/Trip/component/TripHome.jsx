@@ -2,9 +2,13 @@ import useTripHook from "../hooks/triphooks"
 import { Menu, Search, Upload, Download, ArrowBigUpDash } from "lucide-react";
 import DataNotFound from "../../../components/NotFound";
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import TripCard from "./tripCard";
+import SearchBar from "../../../components/SearchBar";
+import { useGetTrip, useAddTrip, useDeletTrip, useUpdateTrip } from "../hooks/api.hook";
+import { useGetDriver } from "../../driver/hooks/api.hooks";
+import { useGetVehicle } from "../../vehicles/hooks/api.hooks";
+import { useGetRoute } from "../../triproute/hooks/route.hooks";
+import DataSpinner from "../../../components/Loader/DataSpinner";
 
 const TripHome = () => {
 
@@ -12,11 +16,9 @@ const TripHome = () => {
     open,
     OpenForm,
     CloseForm,
-
-    register,
     handleSubmit,
     errors,
-    handleSubmitForm,
+    register,
     scrollTop,
     closeExcelBox,
     OpenExcelBox,
@@ -24,84 +26,107 @@ const TripHome = () => {
     closeFileBox,
     openFileBox,
     openFilePopup,
-    handleExcelFile,
-
-
     handleSetUpdate,
     updateId,
-    handleHydrating,
-    searching,
-    search,
     enableTouching
   } = useTripHook();
 
+  //  Trip fetching data  
+  const { data, isPending, error, setSearch, search } = useGetTrip();
+  const { createMutate, createPending } = useAddTrip();
+  const { deleteMutate, deletePending, deleteId } = useDeletTrip();
+  const { updateMutate, updatePending } = useUpdateTrip();
 
-  const { value, driverNames, vehicleNumbers, Routes, isLoading, fetchDataLoader } = useSelector((state) => state.trip)
+  // Driver fetching data 
+  const { data: driverData, isPending: driverPending, error: driverError } = useGetDriver()
+
+  // vehicleNumber fetching data
+
+  const { data: vehicleData, isPending: vehiclePending, error: vehicleError } = useGetVehicle();
+
+  // Route fetching data 
+
+  const { data: routeData, isPending: routePending, error: routeError } = useGetRoute();
 
 
 
 
-  useEffect(() => {
-    handleHydrating();
-  }, [])
-
-  if (isLoading) {
-    return <DataFetchingSpinner />
-  }
 
 
+  // main 
 
   return (
-    <div className="flex flex-col items-center justify-center bg-slate-100 p-6 ">
+    < div className="flex flex-col relative min-h-full items-center justify-center bg-slate-100 p-6 " >
 
 
       {/* header portion  */}
       <div className=" w-full">
-        <div className="flex justify-end items-center p-3 gap-x-5  relative">
+        <div className="flex justify-between items-center p-3 gap-x-5  relative">
+
+          <div className="flex-1">
+            <SearchBar search={search} setSearch={setSearch} />
+          </div>
+
+          <div className="flex-1 flex justify-end items-center p-3 gap-x-5  relative">
 
 
-          <div className='relative w-20 flex justify-end  h-10'
-            onMouseEnter={OpenExcelBox}
-            onMouseLeave={closeExcelBox}
-          >
+            <div className='relative w-20 flex justify-end  h-10'
+              onMouseEnter={OpenExcelBox}
+              onMouseLeave={closeExcelBox}
+            >
 
 
-            <button className='cursor-pointer'>
-              <Menu size={20} className='text-gray-500' />
+              <button className='cursor-pointer'>
+                <Menu size={20} className='text-gray-500' />
+              </button>
+
+
+              {ExcelDataBox &&
+
+                <div className='w-24 h-20 bg-white border border-gray-400 flex flex-col gap-y-2 justify-center items-center absolute top-5 right-7 rounded-b-xl rounded-tl-3xl p-5'
+                >
+                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
+
+                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
+
+
+                </div>
+              }
+
+            </div>
+
+
+
+            <button
+              onClick={OpenForm}
+              className="bg-blue-700 p-2 rounded-lg text-white cursor-pointer font-bold">
+
+              {updateId ? "Update Trip" : " Add Trip"}
+
             </button>
 
-
-            {ExcelDataBox &&
-
-              <div className='w-24 h-20 bg-white border border-gray-400 flex flex-col gap-y-2 justify-center items-center absolute top-5 right-7 rounded-b-xl rounded-tl-3xl p-5'
-              >
-                <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
-
-                <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
-
-
-              </div>
-            }
 
           </div>
 
 
-
-          <button
-            onClick={OpenForm}
-            className="bg-blue-700 p-2 rounded-lg text-white cursor-pointer font-bold">
-
-            {updateId ? "Update Trip" : " Add Trip"}
-
-          </button>
-
-
         </div>
+
+
 
         {
           open &&
-          <form className="bg-white transition"
-            onSubmit={handleSubmit(updateId ? handleUpdateVehicle : handleSubmitForm)}
+          <form
+            onClick={(e) => e.stopPropagation()}
+
+            className="bg-white transition"
+            onSubmit={handleSubmit(updateId ?
+              (data) => updateMutate(data, {
+                onSuccess: () => CloseForm()
+              }) :
+              (data) => createMutate(data, {
+                onSuccess: () => CloseForm()
+              })
+            )}
           >
 
 
@@ -165,132 +190,150 @@ const TripHome = () => {
 
 
               {/* Driver Name  */}
+              {driverPending ?
 
-              <div className="" >
-
-
-                <input
-                  {...register("driverName", {
-                    required: "* Driver Name is Required",
-                    maxLength: {
-                      value: 10,
-                      message: "* Maximum Length is 10"
-                    },
-                    minLength: {
-                      value: 10,
-                      message: "* Minimum Lenght is 10"
-                    }
-                  })}
-                  type="text"
-                  list='driver'
-                  placeholder="Enter Driver Name"
-                  className="border border-gray-400 p-3 outline-none rounded w-full " />
+                <div className="w-full  flex justify-center items-center">
+                  <DataSpinner />
+                </div>
+                :
+                <div className="" >
 
 
-
-                <datalist id="driver">
-                  {driverNames?.map((d) => (
-                    <option key={d._id} value={d.driverNumber}>
-                      {d.driverName}
-                    </option>
-                  ))}
-                </datalist>
+                  <input
+                    {...register("driverName", {
+                      required: "* Driver Name is Required",
+                      maxLength: {
+                        value: 50,
+                        message: "* Maximum Length is 50"
+                      },
+                      minLength: {
+                        value: 2,
+                        message: "* Minimum Lenght is 2"
+                      }
+                    })}
+                    type="text"
+                    list='driver'
+                    placeholder="Enter Driver Name"
+                    className="border border-gray-400 p-3 outline-none rounded w-full " />
 
 
 
-                {
-                  errors.driverName &&
-                  <p className="text-red-700 text-sm">  {errors.driverName.message} </p>
-                }
+                  <datalist id="driver">
+                    {driverData?.map((d) => (
+                      <option key={d.driverName} value={d.driverName}>
+                        {d.driverName}
+                      </option>
+                    ))}
+                  </datalist>
 
-              </div>
 
+
+                  {
+                    errors.driverName &&
+                    <p className="text-red-700 text-sm">  {errors.driverName.message} </p>
+                  }
+
+                </div>
+              }
 
 
               {/* Vehicle Number  */}
 
-              <div className="" >
+              {vehiclePending ?
+                <div className="w-full flex justify-center items-center">
+                  <DataSpinner />
+                </div>
+                :
+
+                <div className="" >
 
 
-                <input
-                  {...register("vehicleNumber", {
-                    required: "* Vehicle Number is Required",
-                    maxLength: {
-                      value: 30,
-                      message: "* Maximum Length is 30"
-                    },
-                    minLength: {
-                      value: 5,
-                      message: "* Minimum Lenght is 5"
+                  <input
+                    {...register("vehicleNumber", {
+                      required: "* Vehicle Number is Required",
+                      maxLength: {
+                        value: 30,
+                        message: "* Maximum Length is 30"
+                      },
+                      minLength: {
+                        value: 5,
+                        message: "* Minimum Lenght is 5"
+                      }
+                    })}
+                    type="text"
+                    list='vehicles'
+                    placeholder="Enter Vehicle Number (ex: MP 09 AB 1234)"
+                    className="border border-gray-400 p-3 outline-none rounded w-full " />
+
+
+
+                  <datalist id='vehicles'
+
+                    className='border border-amber-900 p-2 rounded w-full'>
+
+                    {
+                      vehicleData?.map((v) => (<option value={v.vehicleNumber}> {v.vehicleNumber} </option>))
                     }
-                  })}
-                  type="text"
-                  list='vehicles'
-                  placeholder="Enter Vehicle Number (ex: MP 09 AB 1234)"
-                  className="border border-gray-400 p-3 outline-none rounded w-full " />
+                  </datalist>
 
 
-
-                <datalist id='vehicles'
-
-                  className='border border-amber-900 p-2 rounded w-full'>
 
                   {
-                    vehicleNumbers?.map((v) => (<option value={v.vehicleNumber}> {v.vehicleNumber} </option>))
+                    errors.vehicleNumber &&
+                    <p className="text-red-700 text-sm">  {errors.vehicleNumber.message} </p>
                   }
-                </datalist>
 
-
-
-                {
-                  errors.vehicleNumber &&
-                  <p className="text-red-700 text-sm">  {errors.vehicleNumber.message} </p>
-                }
-
-              </div>
-
+                </div>
+              }
 
               {/* Route  */}
 
-              <div className="" >
+
+              {routePending ?
+                <div className="w-full flex justify-center items-center h-12">
+                  <DataSpinner />
+                </div>
+                :
+                <div className="" >
 
 
-                <input
-                  {...register("route", {
-                    required: "* Route Number is Required",
-                    maxLength: {
-                      value: 50,
-                      message: "* Maximum Length is 50"
-                    },
-                    minLength: {
-                      value: 5,
-                      message: "* Minimum Lenght is 5"
+                  <input
+                    {...register("route", {
+                      required: "* Route Number is Required",
+                      maxLength: {
+                        value: 50,
+                        message: "* Maximum Length is 50"
+                      },
+                      minLength: {
+                        value: 5,
+                        message: "* Minimum Lenght is 5"
+                      }
+                    })}
+                    type="text"
+                    list='route'
+                    placeholder="ex. Indore-Pithampur"
+                    className="border border-gray-400 p-3 outline-none rounded w-full " />
+
+
+
+                  <datalist id='route'
+
+                    className='border border-amber-900 p-2 rounded w-full'>
+
+                    {
+                      routeData?.map((r) => (<option value={r.route}> {r.route} </option>))
                     }
-                  })}
-                  type="text"
-                  list='route'
-                  placeholder="ex. Indore-Pithampur"
-                  className="border border-gray-400 p-3 outline-none rounded w-full " />
+                  </datalist>
 
 
-
-                <datalist id='route'
-
-                  className='border border-amber-900 p-2 rounded w-full'>
 
                   {
-                    Routes?.map((r) => (<option value={r.route}> {r.route} </option>))
+                    errors.route &&
+                    <p className="text-red-700 text-sm">  {errors.route.message} </p>
                   }
-                </datalist>
 
-
-
-                {
-                  errors.route &&
-                  <p className="text-red-700 text-sm">  {errors.route.message} </p>
-                }
-
-              </div>
+                </div>
+              }
 
             </div>
 
@@ -645,14 +688,6 @@ const TripHome = () => {
         }
 
 
-        {/* <div className=' relative p-5'>
-          <Search className='absolute top-7 left-7 text-blue-700 font-bold' />
-
-          <input type='search' placeholder='Search By vehicleNumber'
-            value={search}
-            className='  outline-none border px-10 py-2 rounded w-1/2 border-gray-500' onChange={(e) => searching(e.target.value)} />
-        </div> */}
-
 
 
       </div>
@@ -662,34 +697,60 @@ const TripHome = () => {
 
       {/* data display portion  */}
       <div div className=" w-full" >
+
+
         {
-          value.length > 0 ?
 
-            <div className="flex flex-col gap-y-5">
-              {/* // cards display here   */}
-              <div className="py-5 grid  gap-3  w-full">
+          isPending ?
+            <div className="w-full h-[80vh] flex justify-center items-center">
+              <DataFetchingSpinner />
+            </div>
 
-                {value.map((t) => (<TripCard key={t._id}  data={t} />))}
+            :
+            (data && data.length) > 0 ?
 
+              <div className="flex flex-col gap-y-5">
+                {/* // cards display here   */}
+                <div className="py-5 grid  gap-3  w-full">
 
+                  {data.map((t) => (<TripCard key={t._id} data={t}
+                    handleDelete={deleteMutate}
+                    deletePending={deletePending}
+                    deleteId={deleteId}
+                    handleSetUpdate={handleSetUpdate}
+                  />))}
+
+                </div>
+
+                {/* scroll to top button  */}
+
+                <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
 
               </div>
 
-              {/* scroll to top button  */}
-
-              <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
-
-            </div>
-
-            // when no data found  
-            :
-            <DataNotFound />
+              // when no data found
+              :
+              <DataNotFound />
 
         }
 
       </div >
 
 
+
+
+
+      {/* {bulkPending && (
+                <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+                    <FileUploading file={excelFile} progress={progress} />
+                </div>
+            )}
+
+            {openFilePopup && (
+                <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+                    <FileUploadPopup onClose={closeFileBox} filesrc={driverExcelSample} onUpload={(file) => bulkAddDriver({ file })} />
+                </div>
+            )} */}
 
 
 
