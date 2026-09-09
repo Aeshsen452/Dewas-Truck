@@ -4,11 +4,15 @@ import DataNotFound from "../../../components/NotFound";
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
 import TripCard from "./tripCard";
 import SearchBar from "../../../components/SearchBar";
-import { useGetTrip, useAddTrip, useDeletTrip, useUpdateTrip } from "../hooks/api.hook";
+import { useGetTrip, useAddTrip, useDeletTrip, useUpdateTrip, useBulkAddTrip } from "../hooks/api.hook";
 import { useGetDriver } from "../../driver/hooks/api.hooks";
 import { useGetVehicle } from "../../vehicles/hooks/api.hooks";
 import { useGetRoute } from "../../triproute/hooks/route.hooks";
 import DataSpinner from "../../../components/Loader/DataSpinner";
+import FileUploading from "../../../components/FileuploadingLoader";
+import FileUploadPopup from "../../../components/FileUploadBox";
+import tripExcelSample from "../../../../public/tripExcelSample.PNG"
+
 
 const TripHome = () => {
 
@@ -48,7 +52,7 @@ const TripHome = () => {
 
   const { data: routeData, isPending: routePending, error: routeError } = useGetRoute();
 
-
+  const { bulkAddTrip, bulkPending, bulkError, progress, excelFile } = useBulkAddTrip();
 
 
 
@@ -445,9 +449,6 @@ const TripHome = () => {
             </div>
 
 
-
-
-
             {/* Loading Time Inputs And Touching points   */}
 
             {enableTouching &&
@@ -740,17 +741,17 @@ const TripHome = () => {
 
 
 
-      {/* {bulkPending && (
-                <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
-                    <FileUploading file={excelFile} progress={progress} />
-                </div>
-            )}
+      {bulkPending && (
+        <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+          <FileUploading file={excelFile} progress={progress} />
+        </div>
+      )}
 
-            {openFilePopup && (
-                <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
-                    <FileUploadPopup onClose={closeFileBox} filesrc={driverExcelSample} onUpload={(file) => bulkAddDriver({ file })} />
-                </div>
-            )} */}
+      {openFilePopup && (
+        <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+          <FileUploadPopup onClose={closeFileBox} filesrc={tripExcelSample} onUpload={file => bulkAddTrip(file)} />
+        </div>
+      )}
 
 
 

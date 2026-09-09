@@ -267,8 +267,29 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                             <PayrollItem
                                 label="Trip Status"
                                 value={data.payroll.tripStatus}
-                                color="red"
+                                color={data.payroll.tripStatus === "Late" ? "red" : "green"}
                             />
+
+
+                            {data.refundedamount &&
+                                <PayrollItem
+                                    label="Refunded Amount"
+                                    value={data.refundedamount}
+                                    color="green"
+                                />
+                            }
+
+
+                            {data.remark &&
+                                <div className="col-span-2 rounded-xl  p-4 md:col-span-2 border border-slate-200">
+                                    <span className="text-red-600 font-bold">remark : </span>
+                                    {
+                                        data.remark
+                                    }
+
+                                </div>
+
+                            }
 
                             <div className="col-span-2 rounded-xl bg-gray-900 p-4 md:col-span-2">
                                 <p className="text-xs font-medium text-gray-400">
@@ -278,6 +299,16 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                                     ₹{data.payroll.TotalSalary}
                                 </p>
                             </div>
+
+
+
+
+
+
+
+
+
+
                         </div>
                     </div>
                 )}

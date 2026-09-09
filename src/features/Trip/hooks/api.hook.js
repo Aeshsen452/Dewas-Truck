@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { getTripApi, addTripApi, deleteTripApi, updateTripApi } from "../api/trip.api"
+import { getTripApi, addTripApi, deleteTripApi, updateTripApi, bulkTripApi } from "../api/trip.api"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
@@ -39,7 +39,7 @@ export const useAddTrip = () => {
             })
         },
         onError: (error) => {
-            toast.success(error?.response?.data.message || "Something went wrong");
+            toast.error(error?.response?.data.message || "Something went wrong");
         }
     })
 
@@ -96,4 +96,37 @@ export const useUpdateTrip = () => {
         updateMutate: mutate,
         updatePending: isPending
     }
+}
+
+export const useBulkAddTrip = () => {
+    const queryClient = useQueryClient();
+    const [progress, setProgress] = useState(0);
+    const [excelFile, setExcelFile] = useState(null);
+
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: (file) => bulkTripApi(file, setProgress),
+        onMutate: (file) => setExcelFile(file),
+        onSuccess: (data) => {
+            toast.success(data.message);
+            queryClient.invalidateQueries({
+                queryKey: ["trip"]
+            })
+        },
+        onError: (error) => {
+            toast.error(error?.response?.data?.message || "something went wrong");
+        },
+        onSettled: () => {
+            setExcelFile(null);
+            setProgress(0)
+        }
+    })
+
+    return {
+        bulkAddTrip: mutate,
+        bulkPending: isPending,
+        bulkError: error,
+        progress,
+        excelFile,
+    }
+
 }

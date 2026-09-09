@@ -38,3 +38,19 @@ export const updateTripApi = async (payload) => {
     }
 }
 
+export const bulkTripApi = async (file, setprogress) => {
+    try {
+        const formData = new FormData();
+        formData.append("ExcelFile", file)
+        const { data } = await AxiosInstance.post("/trip/bulk", formData, {
+            onUploadProgress: ({ loaded, total }) => {
+                const per = Math.round(loaded * 100 / total);
+                setprogress(per)
+            }
+        });
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
