@@ -8,7 +8,7 @@ const VehicleCard = ({ v, handleDeleteVehicle, update, deletePending, deleteId }
         <div
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-xl shadow-md p-4 border border-gray-200 flex flex-col items-center gap-y-3">
-            <h3 className="text-lg font-semibold text-gray-800 w-full text-center">
+            <h3 className="text-base font-semibold text-gray-800 w-full text-center">
                 {v.vehicleNumber}
             </h3>
 

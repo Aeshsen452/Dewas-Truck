@@ -8,7 +8,7 @@ const Login = lazy(() => import('../features/auth/Component/LoginPage'))
 const Signup = lazy(() => import('../features/auth/Component/Signup'))
 const MainRoute = lazy(() => import('./Proctected/MainRoute'))
 const Layout = lazy(() => import('../Layout/Layout'))
-const HomePage = lazy(() => import('../components/HomePage'));
+const HomePage = lazy(() => import('../features/Home/Pages'));
 const VehiclesHome = lazy(() => import('../features/vehicles/component/HomePage'));
 const TripRouteHome = lazy(() => import('../features/triproute/component/TripHome'));
 const DriverHome = lazy(() => import('../features/driver/component/DriverHome'));

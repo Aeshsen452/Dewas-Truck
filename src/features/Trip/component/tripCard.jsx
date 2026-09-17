@@ -8,34 +8,6 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
 
     const deleting = deletePending && deleteId === data._id
 
-    // const data = {
-    //     date: "2026-08-27",
-    //     rps: "8204727",
-    //     driverName: "6232531705",
-    //     vehicleNumber: "MP09DJ5081",
-    //     route: "Indore-Mandsore-Neemch",
-    //     dispatchTime: "2026-08-27T03:02",
-    //     inTime: "2026-08-27T11:35",
-    //     givenHour: "08",
-    //     givenMinutes: "30",
-    //     touchingPoint: "Mandsore",
-    //     unloadTime: "2026-08-27T08:50",
-    //     loadTime: "2026-08-27T10:08",
-    //     loadhour: "01",
-    //     loadminute: "30",
-    //     loadStatus: "Early",
-    //     loadedTimeTaken: "1h :18m",
-    //     loadedTimeDifference: "0h :12m",
-    //     payroll: {
-    //         incentive: 0,
-    //         penalty: 150,
-    //         tripStatus: "Late",
-    //         tripTimeTaken: "8h : 33m",
-    //         tripTimeDifference: "0h : 3m",
-    //         tripSalary: 700,
-    //         TotalSalary: 550,
-    //     },
-    // };
 
     const formatDateTime = (value) => {
         const date = new Date(value);
@@ -134,7 +106,8 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <InfoItem label="Driver" value={data.driverName} />
                     <InfoItem label="Vehicle Number" value={data.vehicleNumber} />
-                    <InfoItem label="Touching Point" value={data.touchingPoint} />
+                    {data.touchingPoint && <InfoItem label="Touching Point" value={data.touchingPoint} />}
+
                     <InfoItem label="Route" value={data.route} full />
                 </div>
 

@@ -1,7 +1,7 @@
 
 import usevehiclesHook from '../hooks/vehiclesHook';
 import DataNotFound from '../../../components/NotFound';
-import { ArrowBigUpDash, Menu, Download, Upload, Search } from 'lucide-react';
+import { Menu, Download, Upload, Search } from 'lucide-react';
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
 import VehicleCard from './Card';
 import FileUploadPopup from '../../../components/FileUploadBox';
@@ -9,10 +9,12 @@ import { useGetVehicle, useDeleteVehicle, useAddVehicles, useUpdateVehicles, use
 import SearchBar from '../../../components/SearchBar';
 import vehicleExcelSample from "../../../../public/vehicleExcelSample.PNG"
 import FileUploading from '../../../components/FileuploadingLoader';
+import Scroll from '../../../components/Scoll';
+import ErrorComponent from '../../../components/ErrorMessage';
 
 const HomePage = () => {
 
-    const { open, OpenForm, CloseForm, register, handleSubmit, errors, scrollTop,
+    const { open, OpenForm, CloseForm, register, handleSubmit, errors,
         closeExcelBox, OpenExcelBox, ExcelDataBox,
         closeFileBox,
         openFileBox,
@@ -29,6 +31,14 @@ const HomePage = () => {
     const { createMutate, createPending } = useAddVehicles();
     const { updateMutate, updatePending } = useUpdateVehicles();
     const { bulkMutate, bulkPending, excelFile, progress } = useBulkAddVehicles()
+
+
+
+    if(error){
+        return  <div className="p-20">
+            <ErrorComponent />
+            </div>
+    }
 
 
 
@@ -206,7 +216,7 @@ const HomePage = () => {
 
                             {/* scroll to top button  */}
 
-                            <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
+                            <Scroll />
 
 
 

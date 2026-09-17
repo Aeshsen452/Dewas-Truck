@@ -3,19 +3,20 @@ import useRoute from "../hooks/Route";
 import TripCard from "./TripCard";
 import DataNotFound from "../../../components/NotFound";
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
-import { ArrowBigUpDash, Menu, Upload, Download } from "lucide-react";
+import { Menu, Upload, Download } from "lucide-react";
 import SearchBar from "../../../components/SearchBar";
-import { useGetRoute, useAddRoute, useDeleteRoute, useUpdateRoute, useBulkAddRoute } from "../hooks/route.hooks";
+import { useGetRoute, useAddRoute, useDeleteRoute, useUpdateRoute, useBulkAddRoute, useBulkGetRoute } from "../hooks/route.hooks";
 import FileUploadPopup from "../../../components/FileUploadBox";
 import routeExcelSample from "../../../../public/routeExcelSample.PNG";
 import FileUploading from "../../../components/FileuploadingLoader";
+import Scroll from "../../../components/Scoll";
+import ErrorComponent from "../../../components/ErrorMessage";
 
 const TripHome = () => {
 
   const { register, errors, handleSubmit,
     openAddingBox, setOpenBox, Closing, setUpdateId,
-    updateId, handleUpdateRoute, setUpData,
-    scrollTop,
+    updateId, setUpData,
     closeExcelBox,
     OpenExcelBox,
     openFileBox,
@@ -30,6 +31,15 @@ const TripHome = () => {
   const { updateMutate, updatePending } = useUpdateRoute();
   const { deleteMutate, deletePending, deleteId } = useDeleteRoute();
   const { bulkMutate, bulkPending, excelFile, progress } = useBulkAddRoute();
+  const { ExportData, ExportPending, ExportError } = useBulkGetRoute();
+
+
+
+  if (error) {
+    return <div className="p-20">
+      <ErrorComponent />
+    </div>
+  }
 
 
 
@@ -61,7 +71,14 @@ const TripHome = () => {
                 >
                   <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
 
-                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
+                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={ExportData} disabled={ExportPending}>
+                    {
+                      ExportPending ? "Exporting File..." : <>  Export <Download size={15} />  </>
+                    }
+
+
+
+                  </button>
 
 
                 </div>
@@ -302,7 +319,7 @@ const TripHome = () => {
 
                 {/* <Pagination /> */}
 
-                <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
+                <Scroll />
 
 
 

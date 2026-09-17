@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { getRoutesApi, addRouteApi, deleteRouteApi, editRouteApi, bullAddRouteApi } from "../api/routesapi"
+import { getRoutesApi, addRouteApi, deleteRouteApi, editRouteApi, bullAddRouteApi, bulkGetRouteApi } from "../api/routesapi"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify";
 
@@ -129,4 +129,31 @@ export const useBulkAddRoute = () => {
         excelFile,
         progress
     }
+}
+
+export const useBulkGetRoute = () => {
+    const { mutate, isPending, error } = useMutation({
+        mutationFn: bulkGetRouteApi,
+        onSuccess: (blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "routes.xlsx";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success("Excel file downloaded successfully!")
+        },
+        onError: (error) => {
+            console.log(error)
+            toast.error(error.response?.data.message || "Failed to downold excel file");
+        }
+    });
+    return {
+        ExportData: mutate,
+        ExportPending: isPending,
+        ExportError: error
+    }
+
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 const DataFetchingSpinner = () => {
     return (
-        <span className="loaderspin">jhjhj</span>
+        <span className="loaderspin"></span>
     )
 }
 

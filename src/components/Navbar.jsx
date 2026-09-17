@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 
 const Navbar = () => {
     return (
-        <nav className="w-full border-b border-gray-200 ">
+        <nav className="w-full border-b border-gray-200 sticky top-0 z-50 bg-white">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
 
                 {/* Left */}
@@ -24,8 +24,8 @@ const Navbar = () => {
                             end
                             className={({ isActive }) =>
                                 isActive
-                                    ? "text-blue-700 font-bold border-b-2 border-blue-700 pb-2"
-                                    : "text-black font-bold border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
+                                    ? "text-blue-700 font-medium border-b-2 border-blue-700 pb-2"
+                                    : "text-black font-medium border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
                             }
                         >
                             Home
@@ -35,8 +35,8 @@ const Navbar = () => {
                             to="/main/vehicles"
                             className={({ isActive }) =>
                                 isActive
-                                    ? "text-blue-700 font-bold  border-b-2 border-blue-700 pb-2"
-                                    : "text-black font-bold border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
+                                    ? "text-blue-700 font-medium  border-b-2 border-blue-700 pb-2"
+                                    : "text-black font-medium border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
                             }
 
                         >
@@ -47,8 +47,8 @@ const Navbar = () => {
                             to="/main/routes"
                             className={({ isActive }) =>
                                 isActive
-                                    ? "text-blue-700 font-bold border-b-2 border-blue-700 pb-2"
-                                    : "text-black font-bold border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
+                                    ? "text-blue-700 font-medium border-b-2 border-blue-700 pb-2"
+                                    : "text-black font-medium border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
                             }
                         >
                             Routes
@@ -58,8 +58,8 @@ const Navbar = () => {
                             to="/main/drivers"
                             className={({ isActive }) =>
                                 isActive
-                                    ? "text-blue-700 font-bold border-b-2 border-blue-700 pb-2"
-                                    : "text-black font-bold border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
+                                    ? "text-blue-700 font-medium border-b-2 border-blue-700 pb-2"
+                                    : "text-black font-medium border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
                             }
                         >
                             Drivers
@@ -69,8 +69,8 @@ const Navbar = () => {
                             to="/main/trip"
                             className={({ isActive }) =>
                                 isActive
-                                    ? "text-blue-700 font-bold border-b-2 border-blue-700 pb-2"
-                                    : "text-black font-bold border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
+                                    ? "text-blue-700 font-medium border-b-2 border-blue-700 pb-2"
+                                    : "text-black font-medium border-b-2 border-transparent pb-2 transition hover:text-blue-700 "
                             }
                         >
                             Trip

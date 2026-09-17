@@ -13,7 +13,7 @@ export default function TripCard({ trip, handleDelete, update, updatePending, cr
             {/* Route */}
             <div className="mb-5">
                 <div className="flex justify-between">
-                    <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
+                    <p className="text-xs font-medium  text-slate-400">
                         Route
                     </p>
 
@@ -21,7 +21,7 @@ export default function TripCard({ trip, handleDelete, update, updatePending, cr
 
                 </div>
 
-                <h2 className="mt-1 text-xl font-bold capitalize text-slate-900">
+                <h2 className="mt-1 text-base font-bold capitalize text-slate-900">
                     {trip.route}
                 </h2>
             </div>

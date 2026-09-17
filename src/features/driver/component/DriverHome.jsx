@@ -1,6 +1,5 @@
 import { Menu, Upload, Download, ArrowBigUpDash } from "lucide-react"
 import DataNotFound from "../../../components/NotFound";
-import { scrollTop } from "../../../utils/Scroll";
 import DriverCard from "./Card";
 import useDriverHook from "../hooks/driver.hooks"
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
@@ -9,7 +8,8 @@ import FileUploadPopup from "../../../components/FileUploadBox";
 import driverExcelSample from "../../../../public/driverExcelSample.PNG"
 import FileUploading from "../../../components/FileuploadingLoader";
 import SearchBar from "../../../components/SearchBar";
-
+import Scroll from "../../../components/Scoll";
+import ErrorComponent from "../../../components/ErrorMessage";
 
 const DriverHome = () => {
 
@@ -49,7 +49,9 @@ const DriverHome = () => {
 
 
     if (isError) {
-        return <h1> Error  </h1>
+        return  <div className="p-20">
+            <ErrorComponent />
+            </div>
     }
 
 
@@ -226,7 +228,7 @@ const DriverHome = () => {
             </div>
 
             {/* data display portion  */}
-            <div div className=" w-full" >
+            <div div className=" w-full h-full" >
 
                 {
                     isPending ? <div className="w-full h-[80vh] flex justify-center items-center">
@@ -250,7 +252,8 @@ const DriverHome = () => {
 
                                 {/* scroll to top button  */}
 
-                                <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
+                                <Scroll />
+
 
 
 

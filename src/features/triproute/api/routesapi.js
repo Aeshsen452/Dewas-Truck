@@ -59,3 +59,14 @@ export const bullAddRouteApi = async (File, setprogress) => {
         throw error
     }
 }
+
+export const bulkGetRouteApi = async () => {
+    try {
+        const { data } = await AxiosInstance.get("/route/bulk", {
+            responseType: "blob"
+        });
+        return data
+    } catch (error) {
+        throw error
+    }
+}

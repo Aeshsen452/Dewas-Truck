@@ -11,7 +11,9 @@ import { useGetRoute } from "../../triproute/hooks/route.hooks";
 import DataSpinner from "../../../components/Loader/DataSpinner";
 import FileUploading from "../../../components/FileuploadingLoader";
 import FileUploadPopup from "../../../components/FileUploadBox";
-import tripExcelSample from "../../../../public/tripExcelSample.PNG"
+import tripExcelSample from "../../../../public/tripExcelSample.PNG";
+import Scroll from "../../../components/Scoll";
+import ErrorComponent from "../../../components/ErrorMessage";
 
 
 const TripHome = () => {
@@ -23,7 +25,6 @@ const TripHome = () => {
     handleSubmit,
     errors,
     register,
-    scrollTop,
     closeExcelBox,
     OpenExcelBox,
     ExcelDataBox,
@@ -53,6 +54,13 @@ const TripHome = () => {
   const { data: routeData, isPending: routePending, error: routeError } = useGetRoute();
 
   const { bulkAddTrip, bulkPending, bulkError, progress, excelFile } = useBulkAddTrip();
+
+
+  if(error){
+    return  <div className="p-20">
+            <ErrorComponent />
+            </div>
+  }
 
 
 
@@ -725,7 +733,7 @@ const TripHome = () => {
 
                 {/* scroll to top button  */}
 
-                <div className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </div>
+                <Scroll />
 
               </div>
 

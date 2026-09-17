@@ -19,7 +19,7 @@ export const useGetDriver = () => {
 
     const url = bouce.trim() ? `/driver?search=${bouce}` : `/driver`;
 
-    const { data, isPending, isError } = useQuery({
+    const { data, isPending, isError, error } = useQuery({
         queryKey: ["driver", bouce],
         queryFn: () => getDriverApi(url),
         staleTime: 50000
@@ -29,6 +29,7 @@ export const useGetDriver = () => {
         data,
         isPending,
         isError,
+        error,
         search,
         setSearch
     }
