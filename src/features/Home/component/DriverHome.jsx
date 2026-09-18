@@ -29,7 +29,7 @@ export default function DriverDashboard() {
             </header>
 
             {/* Main */}
-            <main className="flex px-6 py-4 gap-x-5 h-[90vh] overflow-hidden">
+            <main className="flex px-6 py-4 gap-x-5 h-[100vh] overflow-hidden">
 
 
                 {/* Sidebar */}

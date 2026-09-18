@@ -1,8 +1,6 @@
-
+import useCommonHook from "../hooks/Common.hook";
 
 const Summary = ({data}) => {
-
-
     const SumarryData = Object.values(data[0].data);
      
      const selectedDriver = SumarryData.reduce((acc, curr) => {
@@ -12,11 +10,12 @@ const Summary = ({data}) => {
         return acc;
       }, { salary: 0, deducted: 0, rps: 0 });
 
-      console.log("selectedDriver", selectedDriver);
-      
+      const {register,isOpen, handleSubmit,handleFormSubmit,Deducteddata} = useCommonHook();
+    
+     
 
   return (
-   <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+   <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
                                 <h3 className="font-semibold text-gray-900">
                                     Salary Summary
                                 </h3>
@@ -49,19 +48,91 @@ const Summary = ({data}) => {
                                         </span>
                                     </div>
 
-                                    {/* <div className="border-t border-gray-100 pt-5">
+
+<form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-y-2">           
+
+
+                                       {/* extra diesel amount */}
+
+
+                                    
+                                            <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-500">
+                                            Extra Diesel Amount
+                                        </span>
+                                        <input
+                                          {...register("extraDiesel")}
+                                         className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
+                                    </div>
+
+
+                            {/* Pf */}
+
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-500">
+                                           PF Amount
+                                        </span>
+                                        <input
+                                         {...register("pf")}
+                                        className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
+                                    </div>
+
+
+                                    {/* Esic  */}
+
+                                     <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-500">
+                                           ESIC Amount
+                                        </span>
+                                        <input
+                                        {...register("esic")}
+                                         className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
+                                    </div>
+
+                                    {/* Advanced  */}
+
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-500">
+                                           Advanced Amount
+                                        </span>
+                                         <input 
+                                         {...register("advanced")}
+                                         className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
+                                    </div>
+
+
+{
+    !isOpen  ?
+
+     <div className="flex justify-end items-center p-3">
+                               <button className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 cursor-pointer" type="submit"> Save </button>
+                                     </div>
+
+
+    :
+
+           <div className="border-t border-gray-100 pt-2">
                                         <div className="flex items-center justify-between">
                                             <span className="font-medium text-gray-700">
                                                 Net Salary
                                             </span>
                                             <span className="text-xl font-bold text-green-600">
                                                 ₹
-                                                {(
-                                                    selectedDriver.salary - selectedDriver.deducted
-                                                )}
+                                               {
+                                                Number(selectedDriver.salary)-Number(Deducteddata.advanced)-Number(Deducteddata.esic)-Number(Deducteddata.extraDiesel)-Number(Deducteddata.pf)
+                                               }
                                             </span>
                                         </div>
-                                    </div> */}
+                                    </div>
+
+
+}
+
+
+                                    
+                                     
+</form>
+                             
 
                                    
                                 </div>

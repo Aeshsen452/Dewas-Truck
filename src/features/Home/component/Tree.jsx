@@ -8,6 +8,8 @@ const DriverTree = ({data}) => {
     ...values
   }));
 
+  console.log("le le maja le",routeData)
+
 
 
   return (
@@ -62,7 +64,7 @@ const DriverTree = ({data}) => {
 
 
               {/* ROUTE TREE */}
-              <div className="relative mt-4 ml-3 border-l border-slate-300 pl-5 grid grid-cols-4 gap-5">
+              <div className="relative mt-4 ml-3 border-l border-slate-300 pl-5 grid grid-cols-5 gap-5">
 
 
 
@@ -88,6 +90,12 @@ const DriverTree = ({data}) => {
                 />
 
                 {/* LATE */}
+                <Metric
+                  color="orange"
+                  label="Late"
+                  value={route.Late}
+                />
+
                 <Metric
                   color="orange"
                   label="Late"

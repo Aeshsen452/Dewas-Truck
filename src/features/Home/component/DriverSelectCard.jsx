@@ -1,17 +1,12 @@
 import { Truck, ChevronDown } from 'lucide-react';
 import { useGetDriver } from '../../driver/hooks/api.hooks';
 import DataSpinner from '../../../components/Loader/DataSpinner';
-import { SelectingDriver } from '../state/dash.Slice';
-import { useDispatch, useSelector } from 'react-redux';
 import ErrorComponent from '../../../components/ErrorMessage';
-
+import SelectComponent from './Select';
 
 const DriverSelectCard = () => {
 
     const { data: drivers, isPending, error } = useGetDriver();
-
-    const dispatch = useDispatch();
-    const { selectedDriver } = useSelector((state) => state.dash);
 
     if (error) {
         return <ErrorComponent />
@@ -39,24 +34,7 @@ const DriverSelectCard = () => {
                         <DataSpinner /> <span className='text-xs text-gray-400'> Fetching drivers Name  </span>
                     </div> :
 
-
-                    <select
-                        value={selectedDriver}
-                        onChange={(e) => dispatch(SelectingDriver(e.target.value))}
-                        className="w-full appearance-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 pr-10 text-sm font-medium text-gray-800 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
-                    >
-                        <option value={""}>
-                            Choose Driver Name
-                        </option>
-
-                        {drivers && drivers.length > 0 && drivers.map((driver) => (
-                            <option key={driver._id} value={driver.driverName}>
-                                {driver.driverName}
-                            </option>
-                        ))}
-                    </select>
-
-
+                    <SelectComponent data={drivers} />
                 }
 
 
