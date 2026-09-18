@@ -1,14 +1,20 @@
 
 
-const Summary = () => {
-
-    const selectedDriver ={
-        salary:5000,
-        deducted:200,
-        rps:10
+const Summary = ({data}) => {
 
 
-    }
+    const SumarryData = Object.values(data[0].data);
+     
+     const selectedDriver = SumarryData.reduce((acc, curr) => {
+        acc.salary += curr.Salary;
+        acc.deducted += Math.abs(curr.Salary_Deducted);
+        acc.rps += curr.rps;
+        return acc;
+      }, { salary: 0, deducted: 0, rps: 0 });
+
+      console.log("selectedDriver", selectedDriver);
+      
+
   return (
    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                                 <h3 className="font-semibold text-gray-900">
@@ -21,7 +27,7 @@ const Summary = () => {
                                             Gross Salary
                                         </span>
                                         <span className="font-semibold text-gray-900">
-                                            ₹{selectedDriver.salary.toLocaleString("en-IN")}
+                                            ₹{selectedDriver.salary}
                                         </span>
                                     </div>
 
@@ -43,7 +49,7 @@ const Summary = () => {
                                         </span>
                                     </div>
 
-                                    <div className="border-t border-gray-100 pt-5">
+                                    {/* <div className="border-t border-gray-100 pt-5">
                                         <div className="flex items-center justify-between">
                                             <span className="font-medium text-gray-700">
                                                 Net Salary
@@ -52,10 +58,10 @@ const Summary = () => {
                                                 ₹
                                                 {(
                                                     selectedDriver.salary - selectedDriver.deducted
-                                                ).toLocaleString("en-IN")}
+                                                )}
                                             </span>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                    
                                 </div>

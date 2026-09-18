@@ -6,13 +6,16 @@ import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner"
 import DriverTree from "./Tree";
 import NoDriverSelected from "./NoDriverSelected";
 import Summary from "./Summary";
+import DriverCard from "./DriverCards";
+import DataNotFound from "../../../components/NotFound";
+import { useSelector } from "react-redux";
 
 export default function DriverDashboard() {
 
 
 
 
-
+    const { selectedDriver } = useSelector((state) => state.dash);
     const { data, isPending, error } = useGetDashBoardData();
 
 
@@ -32,7 +35,11 @@ export default function DriverDashboard() {
                 {/* Sidebar */}
                 <aside className="w-3/12 space-y-5 ">
                     <DriverSelectCard />
-                    <Summary />
+                    {
+                        selectedDriver && data && data.length > 0 &&
+                        <Summary data={data} />
+                    }
+
 
                 </aside>
 
@@ -41,19 +48,33 @@ export default function DriverDashboard() {
                 <section className="w-9/12 overflow-y-auto">
 
                     {
-                        false ? <NoDriverSelected />
-                            :
+                        isPending ? <DataFetchingSpinner /> :
 
-                            <>
-                                <h1 className='p-2 font-medium text-center text-base'> Raj Kamal Singh</h1>
-                                <div className="flex flex-col gap-3">
-                                    <DriverTree />
-                                    <DriverTree />
-                                </div>
+                            selectedDriver && data && data.length > 0 ?
+                                <>
+                                    <h1 className='p-2 font-medium text-center text-base'>{selectedDriver}</h1>
+                                    <div className="flex flex-col gap-3">
+                                        {
+                                            data.map((driver, index) => (
+                                                <DriverTree key={index} data={driver} />
+                                            ))
+                                        }
 
-                            </>
+                                    </div>
+                                </>
+                                :
+                                data && data.length > 0 ? <div className="grid gap-5">
+                                    {
+                                        data.map((d, index) => (
+                                            <DriverCard key={index} data={d} />
+                                        ))
+                                    }
+
+                                </div> : <DataNotFound />
 
                     }
+
+
 
                 </section>
 

@@ -1,37 +1,13 @@
 import Metric from "./Metric";
 
-const DriverTree = () => {
+const DriverTree = ({data}) => {
+  const vehicleNumber = data.key;
+  
+  const routeData = Object.entries(data.data).map(([route, values]) => ({
+    route,
+    ...values
+  }));
 
-  const vehicle = {
-    number: "MP430377",
-
-    routes: [
-      {
-        name: "Jamsedpur - Rachi - Indore",
-        rps: 24,
-        salary: 45000,
-        deducted: 3000,
-        onTime: 18,
-        late: 6,
-      },
-      {
-        name: "Indore - Rachi - Jamsedpur",
-        rps: 20,
-        salary: 40000,
-        deducted: 2000,
-        onTime: 15,
-        late: 5,
-      },
-      {
-        name: "Indore - Rachi - Jamsedpur",
-        rps: 22,
-        salary: 42000,
-        deducted: 1500,
-        onTime: 19,
-        late: 3,
-      },
-    ],
-  };
 
 
   return (
@@ -42,7 +18,7 @@ const DriverTree = () => {
 
         <div className="flex h-12 min-w-[120px] items-center justify-center rounded-xl bg-blue-50 px-4">
           <span className="font-bold text-blue-700">
-            {vehicle.number}
+            {vehicleNumber}
           </span>
         </div>
 
@@ -53,7 +29,7 @@ const DriverTree = () => {
       {/* ROUTES */}
       <div className="relative ml-6 mt-5 border-l-2 border-slate-200 pl-7">
 
-        {vehicle.routes.map((route, index) => (
+        {routeData.map((route, index) => (
 
           <div
             key={index}
@@ -70,7 +46,7 @@ const DriverTree = () => {
 
                 <div>
                   <p className="text-sm font-semibold text-slate-800">
-                    {route.name}
+                    {route.route}
                   </p>
 
                   <p className="mt-1 text-xs text-slate-400">
@@ -88,34 +64,34 @@ const DriverTree = () => {
               {/* ROUTE TREE */}
               <div className="relative mt-4 ml-3 border-l border-slate-300 pl-5 grid grid-cols-4 gap-5">
 
-            
+
 
                 {/* SALARY */}
                 <Metric
                   color="green"
                   label="Salary"
-                  value={`₹${route.salary.toLocaleString()}`}
+                  value={`₹${route.Salary}`}
                 />
 
                 {/* DEDUCTED */}
                 <Metric
                   color="red"
                   label="Salary Deducted"
-                  value={`₹${route.deducted.toLocaleString()}`}
+                  value={`₹${route.Salary_Deducted}`}
                 />
 
                 {/* ON TIME */}
                 <Metric
                   color="emerald"
                   label="On Time"
-                  value={route.onTime}
+                  value={route.On_Time}
                 />
 
                 {/* LATE */}
                 <Metric
                   color="orange"
                   label="Late"
-                  value={route.late}
+                  value={route.Late}
                 />
 
               </div>
