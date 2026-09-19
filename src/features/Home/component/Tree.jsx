@@ -1,15 +1,12 @@
 import Metric from "./Metric";
 
-const DriverTree = ({data}) => {
+const DriverTree = ({ data }) => {
   const vehicleNumber = data.key;
-  
+
   const routeData = Object.entries(data.data).map(([route, values]) => ({
     route,
     ...values
   }));
-
-  console.log("le le maja le",routeData)
-
 
 
   return (
@@ -56,53 +53,69 @@ const DriverTree = ({data}) => {
                   </p>
                 </div>
 
-                <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700">
-                  {route.rps} RPS
-                </span>
+
 
               </div>
 
 
               {/* ROUTE TREE */}
-              <div className="relative mt-4 ml-3 border-l border-slate-300 pl-5 grid grid-cols-5 gap-5">
+              <div className="relative mt-4 ml-3 border-l border-slate-300 pl-5 grid grid-cols-2 gap-5">
 
 
 
-                {/* SALARY */}
                 <Metric
-                  color="green"
-                  label="Salary"
-                  value={`₹${route.Salary}`}
-                />
+                  labelName1={"Total Rps"}
+                  labelName2={"Price Per Trip"}
+                  value1={route.rps}
+                  value2={route.TripAmount}
 
-                {/* DEDUCTED */}
-                <Metric
-                  color="red"
-                  label="Salary Deducted"
-                  value={`₹${route.Salary_Deducted}`}
-                />
-
-                {/* ON TIME */}
-                <Metric
-                  color="emerald"
-                  label="On Time"
-                  value={route.On_Time}
-                />
-
-                {/* LATE */}
-                <Metric
-                  color="orange"
-                  label="Late"
-                  value={route.Late}
                 />
 
                 <Metric
-                  color="orange"
-                  label="Late"
-                  value={route.Late}
+                  labelName1={"Early"}
+                  labelName2={"Incentive on onTime"}
+                  value1={route.Early}
+                  value2={route.IncentiveAmount}
+
                 />
+
+                <Metric
+                  labelName1={"Late"}
+                  labelName2={"Penalty Charge"}
+                  value1={route.Late}
+                  value2={route.LateAmount}
+
+                />
+
+                <Metric
+                  labelName1={"OnTime"}
+                  labelName2={"charge"}
+                  value1={route.On_Time}
+                  value2={0}
+
+                />
+
 
               </div>
+
+              <div className="flex justify-center items-center py-3">
+
+
+
+                <div className="w-[50%] flex gap-x-3 items-center justify-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm font-medium text-gray-500">
+                    Total Salary
+                  </p>
+
+                  <p className="  font-bold text-green-600">
+                    ₹{route?.Salary?.toLocaleString('en-IN') || 0}
+                  </p>
+
+
+                </div>
+
+              </div>
+
 
             </div>
           </div>

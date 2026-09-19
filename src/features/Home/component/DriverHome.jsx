@@ -9,16 +9,13 @@ import Summary from "./Summary";
 import DriverCard from "./DriverCards";
 import DataNotFound from "../../../components/NotFound";
 import { useSelector } from "react-redux";
+import SearchBar from "../../../components/SearchBar";
 
 export default function DriverDashboard() {
 
 
-
-
     const { selectedDriver } = useSelector((state) => state.dash);
-    const { data, isPending, error } = useGetDashBoardData();
-
-
+    const { data, isPending, error, setSearch, search } = useGetDashBoardData();
 
     return (
         <div className=" bg-gray-50">
@@ -45,7 +42,16 @@ export default function DriverDashboard() {
 
 
 
-                <section className="w-9/12 overflow-y-auto">
+                <section className="w-9/12 overflow-y-auto relative">
+
+
+                    {!selectedDriver &&
+                        <div className="sticky top-0 z-10 bg-gray-50 py-5">
+                            <SearchBar search={search} setSearch={setSearch} />
+                        </div>
+
+                    }
+
 
                     {
                         isPending ? <DataFetchingSpinner /> :
@@ -63,14 +69,18 @@ export default function DriverDashboard() {
                                     </div>
                                 </>
                                 :
-                                data && data.length > 0 ? <div className="grid gap-5">
-                                    {
-                                        data.map((d, index) => (
-                                            <DriverCard key={index} data={d} />
-                                        ))
-                                    }
+                                data && data.length > 0 ?
 
-                                </div> : <DataNotFound />
+                                    <div className="grid gap-5">
+
+                                        {
+                                            data.map((d, index) => (
+                                                <DriverCard key={index} data={d} />
+                                            ))
+                                        }
+
+                                    </div>
+                                    : <DataNotFound />
 
                     }
 

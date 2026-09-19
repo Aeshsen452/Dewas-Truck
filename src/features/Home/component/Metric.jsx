@@ -1,24 +1,46 @@
-const Metric = ({ label, value }) => {
 
-    return (
-        <div className="relative mb-3 last:mb-0">
+const Metric = ({ labelName1, labelName2, value1, value2 }) => {
+  const total = value1 * value2;
 
-            <div className="flex items-center justify-between rounded-lg bg-white px-3 py-2">
+  return (
+    <div className="flex items-center justify-center gap-2 rounded-xl text-xs bg-white p-5 shadow-sm">
 
-                <span className="text-xs font-medium text-slate-500">
-                    {label}
-                </span>
+      {/* Total RPS */}
+      <div className="text-center flex flex-col gap-y-1">
+        <p className="text-sm text-gray-500">{labelName1}</p>
+        <p className=" font-bold text-gray-800">
+          {value1}
+        </p>
+      </div>
 
-                <span className="text-sm font-semibold text-slate-800">
-                    {value}
-                </span>
+      {/* Multiply */}
+      <div className="font-bold text-gray-400">
+        ×
+      </div>
 
-            </div>
+      {/* Trip Salary */}
+      <div className="text-center flex flex-col gap-y-1">
+        <p className="text-sm text-gray-500">{labelName2}</p>
+        <p className=" font-bold text-gray-800">
+          ₹{value2}
+        </p>
+      </div>
 
-        </div>
-    );
+      {/* Equal */}
+      <div className=" font-bold text-gray-400">
+        =
+      </div>
+
+      {/* Total */}
+      <div className="text-center flex flex-col gap-y-1">
+        <p className="text-sm text-gray-500">Total</p>
+        <p className=" font-bold text-green-600">
+          ₹{total}
+        </p>
+      </div>
+
+    </div>
+  );
 };
 
-export default Metric
-
-
+export default Metric;

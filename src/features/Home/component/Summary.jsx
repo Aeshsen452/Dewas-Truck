@@ -1,18 +1,30 @@
+import { useState } from "react";
 import useCommonHook from "../hooks/Common.hook";
 
 const Summary = ({data}) => {
-    const SumarryData = Object.values(data[0].data);
-     
-     const selectedDriver = SumarryData.reduce((acc, curr) => {
-        acc.salary += curr.Salary;
-        acc.deducted += Math.abs(curr.Salary_Deducted);
-        acc.rps += curr.rps;
-        return acc;
-      }, { salary: 0, deducted: 0, rps: 0 });
+
+   const newData = data.reduce((acc, curr) => {
+ 
+  const extractData = Object.values(curr.data); 
+
+
+  const objectData = extractData.reduce((innerAcc, innerCurr) => {
+    const { Salary, rps } = innerCurr;
+    innerAcc.Salary += Number(Salary || 0);
+    innerAcc.rps += Number(rps || 0);
+    return innerAcc;
+  }, { Salary: 0, rps: 0 });
+
+  
+  acc.Salary += objectData.Salary;
+  acc.rps += objectData.rps;
+
+  return acc;
+}, { Salary: 0, rps: 0 });
+
 
       const {register,isOpen, handleSubmit,handleFormSubmit,Deducteddata} = useCommonHook();
     
-     
 
   return (
    <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
@@ -26,25 +38,18 @@ const Summary = ({data}) => {
                                             Gross Salary
                                         </span>
                                         <span className="font-semibold text-gray-900">
-                                            ₹{selectedDriver.salary}
+                                            ₹{newData.Salary}
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-500">
-                                            Deduction
-                                        </span>
-                                        <span className="font-semibold text-red-500">
-                                            - ₹{selectedDriver.deducted.toLocaleString("en-IN")}
-                                        </span>
-                                    </div>
+                              
 
                                             <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-500">
                                             Total Trip
                                         </span>
                                         <span className="font-semibold">
-                                            {selectedDriver.rps}
+                                            {newData.rps}
                                         </span>
                                     </div>
 
