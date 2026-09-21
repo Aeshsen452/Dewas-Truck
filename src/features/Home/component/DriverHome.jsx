@@ -54,7 +54,13 @@ export default function DriverDashboard() {
 
 
                     {
-                        isPending ? <DataFetchingSpinner /> :
+                        isPending  ? 
+                        <div className="w-full h-[50vh] flex justify-center items-center">
+                        
+                         <DataFetchingSpinner /> 
+                        </div>
+                        
+                        :
 
                             selectedDriver && data && data.length > 0 ?
                                 <>

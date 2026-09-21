@@ -1,10 +1,11 @@
 import { Select } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SelectingDriver } from '../state/dash.Slice';
 
 const SelectComponent = ({ data }) => {
 
     const dispatch = useDispatch();
+    const {selectedDriver} = useSelector((state)=>state.dash)
 
     const options = data.map((item) => ({
         value: item.driverName,
@@ -18,6 +19,7 @@ const SelectComponent = ({ data }) => {
 
     return (
         <Select
+            value={selectedDriver}
             showSearch
             onChange={handleChange}
             options={options}
