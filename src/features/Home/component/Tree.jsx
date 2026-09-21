@@ -1,3 +1,4 @@
+import SalarySummary from "./Metric";
 import Metric from "./Metric";
 
 const DriverTree = ({ data }) => {
@@ -57,65 +58,7 @@ const DriverTree = ({ data }) => {
 
               </div>
 
-
-              {/* ROUTE TREE */}
-              <div className="relative mt-4 ml-3 border-l border-slate-300 pl-5 grid grid-cols-2 gap-5">
-
-
-
-                <Metric
-                  labelName1={"Total Rps"}
-                  labelName2={"Price Per Trip"}
-                  value1={route.rps}
-                  value2={route.TripAmount}
-
-                />
-
-                <Metric
-                  labelName1={"Early"}
-                  labelName2={"Incentive on onTime"}
-                  value1={route.Early}
-                  value2={route.IncentiveAmount}
-
-                />
-
-                <Metric
-                  labelName1={"Late"}
-                  labelName2={"Penalty Charge"}
-                  value1={route.Late}
-                  value2={route.LateAmount}
-
-                />
-
-                <Metric
-                  labelName1={"OnTime"}
-                  labelName2={"charge"}
-                  value1={route.On_Time}
-                  value2={0}
-
-                />
-
-
-              </div>
-
-              <div className="flex justify-center items-center py-3">
-
-
-
-                <div className="w-[50%] flex gap-x-3 items-center justify-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm font-medium text-gray-500">
-                    Total Salary
-                  </p>
-
-                  <p className="  font-bold text-green-600">
-                    ₹{route?.Salary?.toLocaleString('en-IN') || 0}
-                  </p>
-
-
-                </div>
-
-              </div>
-
+              <SalarySummary data={route} />
 
             </div>
           </div>

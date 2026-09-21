@@ -1,46 +1,126 @@
 
-const Metric = ({ labelName1, labelName2, value1, value2 }) => {
-  const total = value1 * value2;
+
+
+const SalarySummary = ({ data }) => {
+
+  const { rps, TripAmount, Early, IncentiveAmount, LateAmount, Late, refund, Salary_Deducted } = data
+
+  const rpsTotal = rps * TripAmount;
+  const incentiveTotal = Early * IncentiveAmount;
+  const penaltyTotal = Salary_Deducted;
+
+  const totalSalary =
+    rpsTotal + incentiveTotal - penaltyTotal + refund;
+
+
 
   return (
-    <div className="flex items-center justify-center gap-2 rounded-xl text-xs bg-white p-5 shadow-sm">
+    <div className="w-full overflow-x-auto">
+      <div className="inline-flex items-center gap-3 whitespace-nowrap
+                      px-3 py-2 rounded-lg  
+                      text-sm shadow-sm">
 
-      {/* Total RPS */}
-      <div className="text-center flex flex-col gap-y-1">
-        <p className="text-sm text-gray-500">{labelName1}</p>
-        <p className=" font-bold text-gray-800">
-          {value1}
-        </p>
+        {/* RPS */}
+        <div className="flex flex-col items-center justify-center">
+          <span className="font-semibold">Rps</span>
+          <span>{rps}</span>
+
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <span className="font-semibold"> Amount</span>
+          <span>₹{TripAmount}</span>
+
+        </div>
+
+        <span>=</span>
+
+        <div className="flex flex-col items-center justify-center">
+          <span className="font-semibold"> Total</span>
+          <span className="font-semibold text-blue-600">
+            ₹{rpsTotal}
+          </span>
+
+        </div>
+
+
+        <span className="text-gray-300">|</span>
+
+
+        <div className="flex flex-col items-center justify-center">
+          <span className="font-semibold">On Time </span>
+          <span>{Early}</span>
+
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <span className="font-semibold"> Amount</span>
+          <span>₹{IncentiveAmount}</span>
+
+        </div>
+
+        <span>=</span>
+
+        <div className="flex flex-col items-center justify-center  text-green-600">
+          <span className="font-semibold">Total</span>
+          <span className="font-semibold ">
+            ₹{incentiveTotal}
+          </span>
+
+        </div>
+
+
+        <span className="text-gray-300">|</span>
+
+        {/* Late */}
+
+        <div className="flex flex-col items-center justify-center ">
+          <span className="font-semibold">Late </span>
+          <span>{Late}</span>
+
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <span className="font-semibold">Amount</span>
+          <span>₹{LateAmount}</span>
+
+        </div>
+
+        <span>=</span>
+
+        <div className="flex flex-col items-center justify-center text-red-600">
+          <span className="font-semibold">Total</span>
+          <span className="font-semibold ">
+            ₹{penaltyTotal}
+          </span>
+
+        </div>
+
+
+
+        <span className="text-gray-300">|</span>
+
+        {/* Refund */}
+        <span>
+          <b>Refund:</b>{" "}
+          <span className="text-orange-500 font-semibold">
+            ₹{refund}
+          </span>
+        </span>
+
+        <span>=</span>
+
+        {/* Salary */}
+        <span className="font-bold text-gray-900">
+          Salary: ₹{totalSalary.toLocaleString("en-IN")}
+        </span>
+
       </div>
-
-      {/* Multiply */}
-      <div className="font-bold text-gray-400">
-        ×
-      </div>
-
-      {/* Trip Salary */}
-      <div className="text-center flex flex-col gap-y-1">
-        <p className="text-sm text-gray-500">{labelName2}</p>
-        <p className=" font-bold text-gray-800">
-          ₹{value2}
-        </p>
-      </div>
-
-      {/* Equal */}
-      <div className=" font-bold text-gray-400">
-        =
-      </div>
-
-      {/* Total */}
-      <div className="text-center flex flex-col gap-y-1">
-        <p className="text-sm text-gray-500">Total</p>
-        <p className=" font-bold text-green-600">
-          ₹{total}
-        </p>
-      </div>
-
     </div>
   );
 };
 
-export default Metric;
+export default SalarySummary;
+
+
+

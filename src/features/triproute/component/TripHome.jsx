@@ -35,11 +35,11 @@ const TripHome = () => {
 
 
 
-  if (error) {
-    return <div className="p-20">
-      <ErrorComponent />
-    </div>
-  }
+  // if (error) {
+  //   return <div className="p-20">
+  //     <ErrorComponent />
+  //   </div>
+  // }
 
 
 
