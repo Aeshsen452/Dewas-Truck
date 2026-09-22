@@ -3,7 +3,7 @@
 
 const SalarySummary = ({ data }) => {
 
-  const { rps, TripAmount, Early, IncentiveAmount, LateAmount, Late, refund, Salary_Deducted } = data
+  const { rps, TripAmount, Early, IncentiveAmount, Late, refund, Salary_Deducted, Diesel } = data
 
   const rpsTotal = rps * TripAmount;
   const incentiveTotal = Early * IncentiveAmount;
@@ -74,19 +74,13 @@ const SalarySummary = ({ data }) => {
 
         {/* Late */}
 
-        <div className="flex flex-col items-center justify-center ">
-          <span className="font-semibold">Late </span>
+        <div className="flex flex-col items-center justify-center text-red-600 ">
+          <span className="font-semibold">Late Rps </span>
           <span>{Late}</span>
 
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <span className="font-semibold">Amount</span>
-          <span>₹{LateAmount}</span>
 
-        </div>
-
-        <span>=</span>
 
         <div className="flex flex-col items-center justify-center text-red-600">
           <span className="font-semibold">Total</span>
@@ -96,24 +90,44 @@ const SalarySummary = ({ data }) => {
 
         </div>
 
+        <span className="text-gray-300">|</span>
+
+        {/* Refund */}
+
+        <div className="flex flex-col items-center justify-center text-orange-400">
+          <span className="font-semibold">Refund</span>
+          <span className="font-semibold ">
+            ₹{refund}
+          </span>
+
+        </div>
+
+
 
 
         <span className="text-gray-300">|</span>
 
-        {/* Refund */}
-        <span>
-          <b>Refund:</b>{" "}
-          <span className="text-orange-500 font-semibold">
-            ₹{refund}
-          </span>
-        </span>
-
-        <span>=</span>
 
         {/* Salary */}
-        <span className="font-bold text-gray-900">
-          Salary: ₹{totalSalary.toLocaleString("en-IN")}
-        </span>
+
+        <div className="flex flex-col items-center justify-center text-orange-400">
+          <span className="font-semibold">Total Salary</span>
+          <span className="font-semibold ">
+            ₹{totalSalary.toLocaleString("en-IN")}
+          </span>
+
+        </div>
+        <span className="text-gray-300">|</span>
+        <div className="flex flex-col items-center justify-center ">
+          <span className="font-semibold"> Diesel</span>
+          <span className="font-semibold ">
+            {Diesel}
+          </span>
+
+        </div>
+
+
+
 
       </div>
     </div>
