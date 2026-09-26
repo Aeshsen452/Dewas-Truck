@@ -6,24 +6,27 @@ import { toast } from "react-toastify"
 export const useGetTrip = () => {
     const [search, setSearch] = useState("")
     const [debounce, setDebounce] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemPerPage = 20;
 
     useEffect(() => {
         let Timer = setTimeout(() => {
+            setCurrentPage(1)
             setDebounce(search)
         }, 1000)
 
         return () => clearTimeout(Timer)
     }, [search])
 
-    const url = debounce.trim() ? `/trip?search=${debounce}` : `/trip`
+    const url = debounce.trim() || currentPage ? `/trip?search=${debounce}&&skip=${itemPerPage * (currentPage - 1)}&&limit=${itemPerPage}` : `/trip`
     const { data, isPending, error } = useQuery({
-        queryKey: ["trip", debounce],
+        queryKey: ["trip", debounce, currentPage],
         queryFn: () => getTripApi(url),
         staleTime: 50000
     })
 
     return {
-        data, isPending, error, search, setSearch
+        data, isPending, error, search, setSearch, itemPerPage, currentPage, setCurrentPage
     }
 
 }

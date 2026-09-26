@@ -1,6 +1,6 @@
 const SearchBar = ({ search, setSearch }) => {
     return (
-        <div className="relative w-full max-w-md">
+        <div className="relative w-full max-w-md ">
             <input
                 type="text"
                 value={search}

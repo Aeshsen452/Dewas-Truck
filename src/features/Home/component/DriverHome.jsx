@@ -10,12 +10,16 @@ import DriverCard from "./DriverCards";
 import DataNotFound from "../../../components/NotFound";
 import { useSelector } from "react-redux";
 import SearchBar from "../../../components/SearchBar";
+import { Pagination } from "antd";
 
 export default function DriverDashboard() {
 
 
     const { selectedDriver } = useSelector((state) => state.dash);
-    const { data, isPending, error, setSearch, search } = useGetDashBoardData();
+    const { data, isPending, error, setSearch, search, currentPage,
+        setCurrentPage,
+        itemPerPage
+    } = useGetDashBoardData();
 
     return (
         <div className=" bg-gray-50">
@@ -26,15 +30,15 @@ export default function DriverDashboard() {
             </header>
 
             {/* Main */}
-            <main className="flex px-6 py-4 gap-x-5 h-[100vh] overflow-hidden">
+            <main className="flex px-6 py-4 gap-x-5 min-h-[80vh] overflow-hidden">
 
 
                 {/* Sidebar */}
                 <aside className="w-3/12 space-y-5 ">
                     <DriverSelectCard />
                     {
-                        selectedDriver && data && data.length > 0 &&
-                        <Summary data={data} />
+                        selectedDriver && data && data.data.length > 0 &&
+                        <Summary data={data.data} />
                     }
 
 
@@ -54,20 +58,20 @@ export default function DriverDashboard() {
 
 
                     {
-                        isPending  ? 
-                        <div className="w-full h-[50vh] flex justify-center items-center">
-                        
-                         <DataFetchingSpinner /> 
-                        </div>
-                        
-                        :
+                        isPending ?
+                            <div className="w-full h-[50vh] flex justify-center items-center">
 
-                            selectedDriver && data && data.length > 0 ?
+                                <DataFetchingSpinner />
+                            </div>
+
+                            :
+
+                            selectedDriver && data && data.data.length > 0 ?
                                 <>
                                     <h1 className='p-2 font-medium text-center text-base'>{selectedDriver}</h1>
                                     <div className="flex flex-col gap-3">
                                         {
-                                            data.map((driver, index) => (
+                                            data.data.map((driver, index) => (
                                                 <DriverTree key={index} data={driver} />
                                             ))
                                         }
@@ -75,17 +79,31 @@ export default function DriverDashboard() {
                                     </div>
                                 </>
                                 :
-                                data && data.length > 0 ?
+                                data && data.data.length > 0 ?
 
-                                    <div className="grid gap-5">
+                                    <>
 
-                                        {
-                                            data.map((d, index) => (
-                                                <DriverCard key={index} data={d} />
-                                            ))
-                                        }
+                                        <div className="grid gap-5 my-3">
 
-                                    </div>
+                                            {
+                                                data.data.map((d, index) => (
+                                                    <DriverCard key={index} data={d} />
+                                                ))
+                                            }
+
+                                        </div>
+                                        <Pagination
+                                            pageSize={itemPerPage}
+                                            total={data.total}
+                                            defaultCurrent={currentPage}
+                                            showSizeChanger={false}
+                                            align="center"
+                                            onChange={(key) => setCurrentPage(key)}
+
+                                        />
+
+                                    </>
+
                                     : <DataNotFound />
 
                     }

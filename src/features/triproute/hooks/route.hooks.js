@@ -6,23 +6,29 @@ import { toast } from "react-toastify";
 export const useGetRoute = () => {
     const [search, setSearch] = useState("");
     const [debounce, setDebounce] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemPerPage = 20;
 
     useEffect(() => {
         let Timer = setTimeout(() => {
+            setCurrentPage(1)
             setDebounce(search)
         }, 1000)
         return () => clearTimeout(Timer)
     }, [search])
 
-    const url = debounce.trim() ? `/route?search=${debounce}` : `/route`
+    const url = debounce.trim() || currentPage ?
+        `/route?search=${debounce}&&skip=${itemPerPage * (currentPage - 1)}&&limit=${itemPerPage}`
+        : `/route`
+
     const { data, isPending, error } = useQuery({
-        queryKey: ["route", debounce],
+        queryKey: ["route", debounce, currentPage],
         queryFn: () => getRoutesApi(url),
         staleTime: 50000
     })
 
     return {
-        data, isPending, error, search, setSearch
+        data, isPending, error, search, setSearch, currentPage, setCurrentPage, itemPerPage
     }
 
 }
@@ -146,7 +152,6 @@ export const useBulkGetRoute = () => {
             toast.success("Excel file downloaded successfully!")
         },
         onError: (error) => {
-            console.log(error)
             toast.error(error.response?.data.message || "Failed to downold excel file");
         }
     });

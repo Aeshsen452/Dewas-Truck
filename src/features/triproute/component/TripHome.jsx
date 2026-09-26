@@ -11,6 +11,8 @@ import routeExcelSample from "../../../../public/routeExcelSample.PNG";
 import FileUploading from "../../../components/FileuploadingLoader";
 import Scroll from "../../../components/Scoll";
 import ErrorComponent from "../../../components/ErrorMessage";
+import { Pagination } from "antd";
+import ActionLoader from "../../../components/Loader/ActionLoader";
 
 const TripHome = () => {
 
@@ -26,7 +28,7 @@ const TripHome = () => {
   } = useRoute();
 
 
-  const { data, isPending, error, search, setSearch } = useGetRoute();
+  const { data, isPending, error, search, setSearch, currentPage, setCurrentPage, itemPerPage } = useGetRoute();
   const { createMutate, createPending } = useAddRoute();
   const { updateMutate, updatePending } = useUpdateRoute();
   const { deleteMutate, deletePending, deleteId } = useDeleteRoute();
@@ -73,7 +75,7 @@ const TripHome = () => {
 
                   <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={ExportData} disabled={ExportPending}>
                     {
-                      ExportPending ? "Exporting File..." : <>  Export <Download size={15} />  </>
+                      ExportPending ? <ActionLoader /> : <>  Export <Download size={15} />  </>
                     }
 
 
@@ -296,13 +298,13 @@ const TripHome = () => {
           </div>
 
             :
-            (data && data.length > 0) ?
+            (data && data.data.length > 0) ?
 
               <div className="flex flex-col gap-y-5">
 
                 <div className="py-5 grid grid-cols-1 lg:grid-cols-4 gap-3  w-full">
                   {
-                    data.map(r => (
+                    data.data.map(r => (
                       <TripCard key={r.id} trip={r}
                         handleDelete={deleteMutate}
                         update={setUpData}
@@ -318,6 +320,13 @@ const TripHome = () => {
                 </div>
 
                 {/* <Pagination /> */}
+
+
+
+                <Pagination align="center" defaultCurrent={currentPage} pageSize={itemPerPage}
+                  total={data?.total} onChange={(key) => setCurrentPage(key)}
+
+                />
 
                 <Scroll />
 

@@ -5,12 +5,14 @@ import { Menu, Download, Upload, Search } from 'lucide-react';
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
 import VehicleCard from './Card';
 import FileUploadPopup from '../../../components/FileUploadBox';
-import { useGetVehicle, useDeleteVehicle, useAddVehicles, useUpdateVehicles, useBulkAddVehicles } from '../hooks/api.hooks';
+import { useGetVehicle, useDeleteVehicle, useAddVehicles, useUpdateVehicles, useBulkAddVehicles, useBulkVehicles } from '../hooks/api.hooks';
 import SearchBar from '../../../components/SearchBar';
 import vehicleExcelSample from "../../../../public/vehicleExcelSample.PNG"
 import FileUploading from '../../../components/FileuploadingLoader';
 import Scroll from '../../../components/Scoll';
 import ErrorComponent from '../../../components/ErrorMessage';
+import { Pagination } from 'antd';
+import ActionLoader from '../../../components/Loader/ActionLoader';
 
 const HomePage = () => {
 
@@ -26,18 +28,22 @@ const HomePage = () => {
 
 
 
-    const { data, isPending, error, search, setSearch } = useGetVehicle();
+    const { data, isPending, error, search, setSearch, currentPage, setCurrentPage, itemPerPage } = useGetVehicle();
     const { deleteMutate, deletePending, deleteId } = useDeleteVehicle();
     const { createMutate, createPending } = useAddVehicles();
     const { updateMutate, updatePending } = useUpdateVehicles();
-    const { bulkMutate, bulkPending, excelFile, progress } = useBulkAddVehicles()
+    const { bulkMutate, bulkPending, excelFile, progress } = useBulkAddVehicles();
+    const { ExportData, ExportPending } = useBulkVehicles();
 
 
 
-    if(error){
-        return  <div className="p-20">
+
+
+
+    if (error) {
+        return <div className="p-20">
             <ErrorComponent />
-            </div>
+        </div>
     }
 
 
@@ -79,7 +85,19 @@ const HomePage = () => {
                                 >
                                     <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
 
-                                    <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
+
+                                    <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'
+                                        onClick={ExportData}
+                                    >
+                                        {ExportPending ? <ActionLoader /> :
+                                            <>
+                                                Export <Download size={15} />
+                                            </>
+
+                                        }
+
+
+                                    </button>
 
 
                                 </div>
@@ -182,10 +200,7 @@ const HomePage = () => {
                 }
 
 
-
-
             </div>
-
 
 
             {/* data display portion  */}
@@ -198,30 +213,36 @@ const HomePage = () => {
                     </div>
 
                     :
-                    (data && data.length > 0) ?
+                    (data && data.data.length > 0) ?
 
-                        <div className="flex flex-col gap-y-5">
-                            {/* // cards display here   */}
-                            <div className="py-5 grid grid-cols-2 lg:grid-cols-4 gap-3  w-full">
-                                {
-                                    data.map((v) => (<VehicleCard v={v} key={v._id}
-                                        handleDeleteVehicle={deleteMutate}
-                                        deletePending={deletePending}
-                                        deleteId={deleteId}
-                                        update={handleSetUpdate}
-                                    />))
-                                }
+                        <>
+
+                            <div className="flex flex-col gap-y-5">
+                                {/* // cards display here   */}
+                                <div className="py-5 grid grid-cols-2 lg:grid-cols-4 gap-3  w-full">
+                                    {
+                                        data.data.map((v) => (<VehicleCard v={v} key={v._id}
+                                            handleDeleteVehicle={deleteMutate}
+                                            deletePending={deletePending}
+                                            deleteId={deleteId}
+                                            update={handleSetUpdate}
+                                        />))
+                                    }
+
+                                </div>
+
+                                {/* scroll to top button  */}
+
+                                <Scroll />
 
                             </div>
+                            <Pagination align="center" defaultCurrent={currentPage} total={data.total}
+                                pageSize={itemPerPage}
+                                onChange={(key) => setCurrentPage(key)}
+                            />
 
-                            {/* scroll to top button  */}
 
-                            <Scroll />
-
-
-
-                        </div>
-
+                        </>
                         // when no data found
                         :
                         <DataNotFound />
@@ -232,18 +253,22 @@ const HomePage = () => {
 
 
 
-            {bulkPending && (
-                <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
-                    <FileUploading file={excelFile} progress={progress} />
-                </div>
-            )}
+            {
+                bulkPending && (
+                    <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+                        <FileUploading file={excelFile} progress={progress} />
+                    </div>
+                )
+            }
 
-            {openFilePopup && (
-                <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
-                    <FileUploadPopup onClose={closeFileBox} filesrc={vehicleExcelSample}
-                        onUpload={bulkMutate} />
-                </div>
-            )}
+            {
+                openFilePopup && (
+                    <div className="absolute  z-50 opacity-90  w-full min-h-full flex justify-center py-5 ">
+                        <FileUploadPopup onClose={closeFileBox} filesrc={vehicleExcelSample}
+                            onUpload={bulkMutate} />
+                    </div>
+                )
+            }
 
 
         </div >

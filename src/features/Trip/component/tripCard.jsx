@@ -32,15 +32,15 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
     return (
         <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full  overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            className="w-full overflow-hidden  px-2 ">
             {/* Header */}
-            <div className="border-b border-gray-100 bg-gray-50 px-5 py-4">
+            <div className="border-b border-gray-100">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
-                        <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
+                        <p className=" font-medium uppercase tracking-wider text-gray-500">
                             Trip Date
                         </p>
-                        <h2 className="mt-1 text-lg font-bold text-gray-900">
+                        <h2 className="mt-1  font-bold text-gray-900">
                             {data.date}
                         </h2>
                     </div>
@@ -70,7 +70,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                        <span className="rounded-full bg-blue-50 px-3 py-1  font-semibold text-blue-700">
                             RPS: {data.rps}
                         </span>
 
@@ -78,7 +78,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                         {data.loadStatus &&
 
                             <span
-                                className={`rounded-full px-3 py-1 text-xs font-semibold ${data.loadStatus === "Early"
+                                className={`rounded-full px-3 py-1  font-semibold ${data.loadStatus === "Early"
                                     ? "bg-green-50 text-green-700"
                                     : "bg-red-50 text-red-700"
                                     }`}
@@ -89,7 +89,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                         }
 
                         <span
-                            className={`rounded-full px-3 py-1 text-xs font-semibold ${data.payroll.tripStatus === "Late"
+                            className={`rounded-full px-3 py-1  font-semibold ${data.payroll.tripStatus === "Late"
                                 ? "bg-red-50 text-red-700"
                                 : "bg-green-50 text-green-700"
                                 }`}
@@ -101,7 +101,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
             </div>
 
             {/* Main Details */}
-            <div className="p-5">
+            <div className="">
                 {/* Vehicle / Driver */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <InfoItem label="Driver" value={data.driverName} />
@@ -114,7 +114,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                 {/* Timeline */}
                 <div className="my-6 border-t border-gray-100" />
 
-                <h3 className="mb-4 text-sm font-semibold text-gray-900">
+                <h3 className="mb-4  font-semibold text-gray-900">
                     Trip Timeline
                 </h3>
 
@@ -184,8 +184,8 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                     className="mt-6 flex w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left transition hover:bg-gray-100"
                 >
                     <div>
-                        <p className="text-sm font-semibold text-gray-900">Payroll</p>
-                        <p className="text-xs text-gray-500">
+                        <p className=" font-semibold text-gray-900">Payroll</p>
+                        <p className=" text-gray-500">
                             Salary, penalty and incentive details
                         </p>
                     </div>
@@ -288,43 +288,8 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
             </div>
 
 
-            {/* actions buttons  */}
 
-            {
-                deleting ?
-
-
-                    <div className="p-5 flex justify-center items-center">
-                        <ActionLoader />
-                    </div>
-                    :
-                    <div className="p-5 flex justify-center items-center gap-x-5">
-                        <button className="cursor-pointer"
-                            style={{
-                                cursor: deletePending ? "not-allowed" : "pointer"
-                            }}
-                            disabled={deletePending}
-                            onClick={() => handleSetUpdate(data)}
-
-                        >
-                            <FilePenLine className="text-green-700" />
-                        </button>
-                        <button style={{
-                            cursor: deletePending ? "not-allowed" : "pointer"
-                        }}
-                            disabled={deletePending}
-                            onClick={() => handleDelete(data._id)}
-                        >
-                            <Trash className="text-red-700" />
-                        </button>
-                        <button style={{
-                            cursor: deletePending ? "not-allowed" : "pointer"
-                        }}
-                            disabled={deletePending}>
-                            <Download className="text-blue-700" />
-                        </button>
-                    </div>
-            }
+           
 
         </div>
     );
@@ -383,4 +348,14 @@ function PayrollItem({ label, value, color = "default" }) {
         </div>
     );
 }
+
+
+
+
+
+
+
+
+
+
 

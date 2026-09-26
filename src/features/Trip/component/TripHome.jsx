@@ -14,7 +14,9 @@ import FileUploadPopup from "../../../components/FileUploadBox";
 import tripExcelSample from "../../../../public/tripExcelSample.PNG";
 import Scroll from "../../../components/Scoll";
 import ErrorComponent from "../../../components/ErrorMessage";
-
+import VehicleCard from "./tripShortCard";
+import useModal from "../../../components/Modal/Modal";
+import { Pagination } from "antd";
 
 const TripHome = () => {
 
@@ -33,11 +35,13 @@ const TripHome = () => {
     openFilePopup,
     handleSetUpdate,
     updateId,
-    enableTouching
+    enableTouching,
+    setViewData,
+    viewData
   } = useTripHook();
 
   //  Trip fetching data  
-  const { data, isPending, error, setSearch, search } = useGetTrip();
+  const { data, isPending, error, setSearch, search, itemPerPage, currentPage, setCurrentPage } = useGetTrip();
   const { createMutate, createPending } = useAddTrip();
   const { deleteMutate, deletePending, deleteId } = useDeletTrip();
   const { updateMutate, updatePending } = useUpdateTrip();
@@ -55,21 +59,23 @@ const TripHome = () => {
 
   const { bulkAddTrip, bulkPending, bulkError, progress, excelFile } = useBulkAddTrip();
 
+  const { contextHolder, handleClick } = useModal();
 
-  if(error){
-    return  <div className="p-20">
-            <ErrorComponent />
-            </div>
+
+
+
+  if (error) {
+    return <div className="p-20">
+      <ErrorComponent />
+    </div>
   }
-
-
-
 
   // main 
 
   return (
     < div className="flex flex-col relative min-h-full items-center justify-center bg-slate-100 p-6 " >
 
+      {contextHolder}
 
       {/* header portion  */}
       <div className=" w-full">
@@ -231,7 +237,7 @@ const TripHome = () => {
 
 
                   <datalist id="driver">
-                    {driverData?.map((d) => (
+                    {driverData?.data.map((d) => (
                       <option key={d.driverName} value={d.driverName}>
                         {d.driverName}
                       </option>
@@ -284,7 +290,7 @@ const TripHome = () => {
                     className='border border-amber-900 p-2 rounded w-full'>
 
                     {
-                      vehicleData?.map((v) => (<option value={v.vehicleNumber}> {v.vehicleNumber} </option>))
+                      vehicleData?.data.map((v) => (<option value={v.vehicleNumber}> {v.vehicleNumber} </option>))
                     }
                   </datalist>
 
@@ -333,7 +339,7 @@ const TripHome = () => {
                     className='border border-amber-900 p-2 rounded w-full'>
 
                     {
-                      routeData?.map((r) => (<option value={r.route}> {r.route} </option>))
+                      routeData?.data.map((r) => (<option value={r.route}> {r.route} </option>))
                     }
                   </datalist>
 
@@ -663,22 +669,6 @@ const TripHome = () => {
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div className="flex justify-end px-5 ">
               <div className="flex gap-x-5 py-5">
                 <button type="button" className="px-3 py-1 rounded  text-white font-semibold cursor-pointer bg-red-700"
@@ -716,23 +706,37 @@ const TripHome = () => {
             </div>
 
             :
-            (data && data.length) > 0 ?
+            (data && data.data.length) > 0 ?
 
               <div className="flex flex-col gap-y-5">
                 {/* // cards display here   */}
-                <div className="py-5 grid  gap-3  w-full">
+                <div className="py-5 grid grid-cols-4  gap-3  w-full">
 
-                  {data.map((t) => (<TripCard key={t._id} data={t}
-                    handleDelete={deleteMutate}
-                    deletePending={deletePending}
-                    deleteId={deleteId}
-                    handleSetUpdate={handleSetUpdate}
-                  />))}
+                  {data.data.map((t) =>
+
+                    <VehicleCard
+                      key={t._id}
+                      handleDelete={deleteMutate}
+                      deletePending={deletePending}
+                      deleteId={deleteId}
+                      handleSetUpdate={handleSetUpdate}
+                      onView={handleClick}
+
+                      data={t} />
+
+                  )}
 
                 </div>
 
                 {/* scroll to top button  */}
 
+                <Pagination pageSize={itemPerPage}
+                  defaultCurrent={currentPage}
+                  total={data.total}
+                  onChange={(key) => setCurrentPage(key)}
+                  align="center"
+                  showSizeChanger={false}
+                />
                 <Scroll />
 
               </div>

@@ -39,6 +39,8 @@ const useTripHook = () => {
         refundedamount: "",
     };
 
+    const [viewData, setViewData] = useState(null);
+
 
     // react hook form 
     const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({
@@ -50,6 +52,17 @@ const useTripHook = () => {
 
     //    watch the value of route to auto fill the touching point and enable loaded and unloaded 
     const point = watch("route");
+
+    const dateHtml = watch("date");
+
+
+    useEffect(() => {
+        console.log("Html Date", dateHtml)
+
+    }, [dateHtml])
+
+
+
     console.log("checking ", point)
 
     // this fn check if points changes 
@@ -110,14 +123,12 @@ const useTripHook = () => {
 
     // set Data to state 
     const handleSetUpdate = (data) => {
+        console.log("data is comming", data)
         setUpdateId(data);
         setOpen(true)
         reset(data);
         scrollTop()
     }
-
-
-
 
     return {
         open,
@@ -135,7 +146,10 @@ const useTripHook = () => {
         openFilePopup,
         handleSetUpdate,
         updateId,
-        enableTouching
+        enableTouching,
+        setViewData,
+        viewData
+
     }
 }
 

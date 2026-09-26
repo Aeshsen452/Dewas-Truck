@@ -10,17 +10,14 @@ export const addRouteApi = async (payload) => {
     }
 }
 
-
 export const getRoutesApi = async (api) => {
     try {
         const { data } = await AxiosInstance.get(api);
-        return data.data;
+        return data;
     } catch (error) {
         throw error
     }
 }
-
-
 
 export const deleteRouteApi = async (id) => {
     try {
@@ -30,8 +27,6 @@ export const deleteRouteApi = async (id) => {
         throw error
     }
 }
-
-
 
 export const editRouteApi = async (payload) => {
     try {

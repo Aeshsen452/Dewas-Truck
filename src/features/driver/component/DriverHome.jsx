@@ -3,13 +3,16 @@ import DataNotFound from "../../../components/NotFound";
 import DriverCard from "./Card";
 import useDriverHook from "../hooks/driver.hooks"
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
-import { useAddDriver, useGetDriver, useDeleteDriver, useUpdateDriver, useBulkAddDriver } from "../hooks/api.hooks";
+import { useAddDriver, useGetDriver, useDeleteDriver, useUpdateDriver, useBulkAddDriver, useBulkExport } from "../hooks/api.hooks";
 import FileUploadPopup from "../../../components/FileUploadBox";
 import driverExcelSample from "../../../../public/driverExcelSample.PNG"
 import FileUploading from "../../../components/FileuploadingLoader";
 import SearchBar from "../../../components/SearchBar";
 import Scroll from "../../../components/Scoll";
 import ErrorComponent from "../../../components/ErrorMessage";
+import { Pagination } from "antd";
+import ActionLoader from "../../../components/Loader/ActionLoader";
+
 
 const DriverHome = () => {
 
@@ -32,26 +35,18 @@ const DriverHome = () => {
 
     } = useDriverHook();
 
-    const { data, isPending, isError, search, setSearch } = useGetDriver();
+    const { data, isPending, isError, search, setSearch, currentPage, setCurrentPage, itemPerPage } = useGetDriver();
     const { deleteMuate, deletePending, deleteId } = useDeleteDriver();
     const { updateMutate, updatePending } = useUpdateDriver();
     const { CreateMuate, createPending } = useAddDriver();
     const { mutate: bulkAddDriver, isPending: bulkPending, progress, excelFile } = useBulkAddDriver();
-
-
-    // if (isPending) {
-    //     return (
-    //         <div className="w-full h-[80vh] flex justify-center items-center">
-    //             <DataFetchingSpinner />
-    //         </div>
-    //     );
-    // }
+    const { ExportData, ExportPending } = useBulkExport();
 
 
     if (isError) {
-        return  <div className="p-20">
+        return <div className="p-20">
             <ErrorComponent />
-            </div>
+        </div>
     }
 
 
@@ -92,7 +87,14 @@ const DriverHome = () => {
                                 >
                                     <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
 
-                                    <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
+
+
+                                    <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={ExportData}>
+                                        {ExportPending ? <ActionLoader /> :
+                                            <> Export <Download size={15} /></>
+                                        }
+
+                                    </button>
 
 
                                 </div>
@@ -235,12 +237,12 @@ const DriverHome = () => {
                         <DataFetchingSpinner />
                     </div> :
 
-                        (data && data.length > 0) ?
+                        (data && data.data.length > 0) ?
                             <div className="flex flex-col gap-y-5">
                                 {/* // cards display here   */}
-                                <div className="py-5 grid grid-cols-3 gap-3  w-full">
+                                <div className="py-5 grid grid-cols-1 lg:grid-cols-3 gap-3  w-full">
                                     {
-                                        data.map((v) => (<DriverCard v={v} key={v._id}
+                                        data.data.map((v) => (<DriverCard v={v} key={v._id}
                                             handleDeleteDriver={deleteMuate}
                                             update={SetUpdatedData}
                                             deleteId={deleteId}
@@ -250,7 +252,16 @@ const DriverHome = () => {
 
                                 </div>
 
+
+
+
+
+
                                 {/* scroll to top button  */}
+                                <Pagination align="center" defaultCurrent={currentPage}
+                                    total={data.total} pageSize={itemPerPage}
+                                    showSizeChanger={false}
+                                    onChange={(key) => setCurrentPage(key)} />
 
                                 <Scroll />
 

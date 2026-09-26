@@ -124,7 +124,7 @@ const Summary = ({data}) => {
                                             <span className="text-xl font-bold text-green-600">
                                                 ₹
                                                {
-                                                Number(selectedDriver.salary)-Number(Deducteddata.advanced)-Number(Deducteddata.esic)-Number(Deducteddata.extraDiesel)-Number(Deducteddata.pf)
+                                                Number(newData.Salary)-Number(Deducteddata.advanced)-Number(Deducteddata.esic)-Number(Deducteddata.extraDiesel)-Number(Deducteddata.pf)
                                                }
                                             </span>
                                         </div>

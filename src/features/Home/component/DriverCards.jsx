@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 export default function DriverRow({ data }) {
+
+    console.log("lele ", data)
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -159,7 +161,7 @@ export default function DriverRow({ data }) {
                             <div>
                                 <span className="text-xs text-gray-400">Total Salary</span>
                                 <p className="font-bold text-green-600">
-                                    ₹{data.TotalSalary.toLocaleString("en-IN")}
+                                    ₹{data.TotalSalary?.toLocaleString("en-IN")}
                                 </p>
                             </div>
 

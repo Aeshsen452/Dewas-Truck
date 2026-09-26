@@ -3,7 +3,7 @@ import { AxiosInstance } from "../../../config/axiosInstance";
 export const GetVehicleApi = async (url) => {
     try {
         const { data } = await AxiosInstance.get(url);
-        return data.data;
+        return data;
     } catch (error) {
         console.log(error)
     }
@@ -45,6 +45,17 @@ export const bulkAddVehicle = async (file, setProgress) => {
                 const percentage = Math.round((loaded * 100) / total);
                 setProgress(percentage)
             }
+        });
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const bulkGetVehicles = async () => {
+    try {
+        const { data } = await AxiosInstance.get("/vehicle/bulk", {
+            responseType: "blob"
         });
         return data
     } catch (error) {

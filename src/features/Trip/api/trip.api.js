@@ -5,7 +5,7 @@ export const getTripApi = async (url) => {
     try {
         const { data } = await AxiosInstance.get(url);
         console.log("getting trip api is fetching")
-        return data.data
+        return data
     } catch (error) {
         throw error
     }

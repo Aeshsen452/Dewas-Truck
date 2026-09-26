@@ -1,14 +1,17 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query"
-import { getDriverApi, createDriverApi, deleteDriverApi, updateDriverApi, bulkAddDriverApi } from "../apis/driver.apis"
+import { getDriverApi, createDriverApi, deleteDriverApi, updateDriverApi, bulkAddDriverApi, bulkExportDriverApi } from "../apis/driver.apis"
 import { useEffect, useState } from "react";
 
 export const useGetDriver = () => {
     const [search, setSearch] = useState("");
-    const [bouce, setDebounce] = useState("")
+    const [bouce, setDebounce] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemPerPage = 21;
 
 
     useEffect(() => {
         let Timer = setTimeout(() => {
+            setCurrentPage(1);
             setDebounce(search)
         }, 1000)
 
@@ -17,10 +20,10 @@ export const useGetDriver = () => {
     }, [search])
 
 
-    const url = bouce.trim() ? `/driver?search=${bouce}` : `/driver`;
+    const url = bouce.trim() || currentPage ? `/driver?search=${bouce}&&skip=${itemPerPage * (currentPage - 1)}&&limit=${itemPerPage}` : `/driver`;
 
     const { data, isPending, isError, error } = useQuery({
-        queryKey: ["driver", bouce],
+        queryKey: ["driver", bouce, currentPage],
         queryFn: () => getDriverApi(url),
         staleTime: 50000
     })
@@ -31,7 +34,10 @@ export const useGetDriver = () => {
         isError,
         error,
         search,
-        setSearch
+        setSearch,
+        currentPage,
+        setCurrentPage,
+        itemPerPage
     }
 
 }
@@ -145,3 +151,27 @@ export const useBulkAddDriver = () => {
         excelFile
     };
 };
+
+export const useBulkExport = () => {
+    const { mutate, isPending } = useMutation({
+        mutationFn: bulkExportDriverApi,
+        onSuccess: (blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "drivers.xlsx";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success("Excel file downloaded successfully!")
+        },
+        onError: (error) => {
+            toast.error(error.response?.data.message || "Failed to downold excel file");
+        }
+    })
+    return {
+        ExportData: mutate,
+        ExportPending: isPending,
+    }
+}

@@ -5,9 +5,9 @@ import { SelectingDriver } from '../state/dash.Slice';
 const SelectComponent = ({ data }) => {
 
     const dispatch = useDispatch();
-    const {selectedDriver} = useSelector((state)=>state.dash)
+    const { selectedDriver } = useSelector((state) => state.dash)
 
-    const options = data.map((item) => ({
+    const options = data.data.map((item) => ({
         value: item.driverName,
         label: item.driverName,
     }));

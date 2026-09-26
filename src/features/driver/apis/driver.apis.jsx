@@ -5,7 +5,7 @@ export const getDriverApi = async (apiEndPoint) => {
     try {
         console.log("fetching get apis")
         const { data } = await AxiosInstance.get(apiEndPoint);
-        return data.data
+        return data
     } catch (error) {
         console.log(error)
     }
@@ -75,3 +75,14 @@ export const bulkAddDriverApi = async ({ file, onProgress }) => {
         throw error;
     }
 };
+
+export const bulkExportDriverApi = async () => {
+    try {
+        const { data } = await AxiosInstance.get("/driver/bulk", {
+            responseType: "blob"
+        })
+        return data
+    } catch (error) {
+        throw error
+    }
+}
