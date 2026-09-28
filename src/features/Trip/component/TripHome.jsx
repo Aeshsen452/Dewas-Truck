@@ -18,6 +18,7 @@ import VehicleCard from "./tripShortCard";
 import useModal from "../../../components/Modal/Modal";
 import { Pagination } from "antd";
 import ActionLoader from "../../../components/Loader/ActionLoader";
+import ErrorResult from "../../../components/ResultMessageBox/ErrorResult";
 
 const TripHome = () => {
 
@@ -223,45 +224,49 @@ const TripHome = () => {
                 <div className="w-full  flex justify-center items-center">
                   <DataSpinner />
                 </div>
-                :
-                <div className="" >
+                : driverData && driverData?.data.length > 0 ?
+                  <div className="" >
 
 
-                  <input
-                    {...register("driverName", {
-                      required: "* Driver Name is Required",
-                      maxLength: {
-                        value: 50,
-                        message: "* Maximum Length is 50"
-                      },
-                      minLength: {
-                        value: 2,
-                        message: "* Minimum Lenght is 2"
-                      }
-                    })}
-                    type="text"
-                    list='driver'
-                    placeholder="Enter Driver Name"
-                    className="border border-gray-400 p-3 outline-none rounded w-full " />
-
-
-
-                  <datalist id="driver">
-                    {driverData?.data.map((d) => (
-                      <option key={d.driverName} value={d.driverName}>
-                        {d.driverName}
-                      </option>
-                    ))}
-                  </datalist>
+                    <input
+                      {...register("driverName", {
+                        required: "* Driver Name is Required",
+                        maxLength: {
+                          value: 50,
+                          message: "* Maximum Length is 50"
+                        },
+                        minLength: {
+                          value: 2,
+                          message: "* Minimum Lenght is 2"
+                        }
+                      })}
+                      type="text"
+                      list='driver'
+                      placeholder="Enter Driver Name"
+                      className="border border-gray-400 p-3 outline-none rounded w-full " />
 
 
 
-                  {
-                    errors.driverName &&
-                    <p className="text-red-700 text-sm">  {errors.driverName.message} </p>
-                  }
+                    <datalist id="driver">
+                      {driverData?.data.map((d) => (
+                        <option key={d.driverName} value={d.driverName}>
+                          {d.driverName}
+                        </option>
+                      ))}
+                    </datalist>
 
-                </div>
+
+
+                    {
+                      errors.driverName &&
+                      <p className="text-red-700 text-sm">  {errors.driverName.message} </p>
+                    }
+
+                  </div>
+                  :
+                  <></>
+
+
               }
 
 
@@ -271,47 +276,51 @@ const TripHome = () => {
                 <div className="w-full flex justify-center items-center">
                   <DataSpinner />
                 </div>
-                :
+                : vehicleData && vehicleData?.data.length > 0 ?
 
-                <div className="" >
+                  <div className="" >
 
 
-                  <input
-                    {...register("vehicleNumber", {
-                      required: "* Vehicle Number is Required",
-                      maxLength: {
-                        value: 30,
-                        message: "* Maximum Length is 30"
-                      },
-                      minLength: {
-                        value: 5,
-                        message: "* Minimum Lenght is 5"
+                    <input
+                      {...register("vehicleNumber", {
+                        required: "* Vehicle Number is Required",
+                        maxLength: {
+                          value: 30,
+                          message: "* Maximum Length is 30"
+                        },
+                        minLength: {
+                          value: 5,
+                          message: "* Minimum Lenght is 5"
+                        }
+                      })}
+                      type="text"
+                      list='vehicles'
+                      placeholder="Enter Vehicle Number (ex: MP 09 AB 1234)"
+                      className="border border-gray-400 p-3 outline-none rounded w-full " />
+
+
+
+                    <datalist id='vehicles'
+
+                      className='border border-amber-900 p-2 rounded w-full'>
+
+                      {
+                        vehicleData?.data.map((v) => (<option value={v.vehicleNumber}> {v.vehicleNumber} </option>))
                       }
-                    })}
-                    type="text"
-                    list='vehicles'
-                    placeholder="Enter Vehicle Number (ex: MP 09 AB 1234)"
-                    className="border border-gray-400 p-3 outline-none rounded w-full " />
+                    </datalist>
 
 
-
-                  <datalist id='vehicles'
-
-                    className='border border-amber-900 p-2 rounded w-full'>
 
                     {
-                      vehicleData?.data.map((v) => (<option value={v.vehicleNumber}> {v.vehicleNumber} </option>))
+                      errors.vehicleNumber &&
+                      <p className="text-red-700 text-sm">  {errors.vehicleNumber.message} </p>
                     }
-                  </datalist>
 
+                  </div>
 
+                  :
+                  <></>
 
-                  {
-                    errors.vehicleNumber &&
-                    <p className="text-red-700 text-sm">  {errors.vehicleNumber.message} </p>
-                  }
-
-                </div>
               }
 
               {/* Route  */}
@@ -321,46 +330,48 @@ const TripHome = () => {
                 <div className="w-full flex justify-center items-center h-12">
                   <DataSpinner />
                 </div>
-                :
-                <div className="" >
+                : routeData && routeData?.data?.length > 0 ?
+                  <div className="" >
 
 
-                  <input
-                    {...register("route", {
-                      required: "* Route Number is Required",
-                      maxLength: {
-                        value: 50,
-                        message: "* Maximum Length is 50"
-                      },
-                      minLength: {
-                        value: 5,
-                        message: "* Minimum Lenght is 5"
+                    <input
+                      {...register("route", {
+                        required: "* Route Number is Required",
+                        maxLength: {
+                          value: 50,
+                          message: "* Maximum Length is 50"
+                        },
+                        minLength: {
+                          value: 5,
+                          message: "* Minimum Lenght is 5"
+                        }
+                      })}
+                      type="text"
+                      list='route'
+                      placeholder="ex. Indore-Pithampur"
+                      className="border border-gray-400 p-3 outline-none rounded w-full " />
+
+
+
+                    <datalist id='route'
+
+                      className='border border-amber-900 p-2 rounded w-full'>
+
+                      {
+                        routeData?.data.map((r) => (<option value={r.route}> {r.route} </option>))
                       }
-                    })}
-                    type="text"
-                    list='route'
-                    placeholder="ex. Indore-Pithampur"
-                    className="border border-gray-400 p-3 outline-none rounded w-full " />
+                    </datalist>
 
 
-
-                  <datalist id='route'
-
-                    className='border border-amber-900 p-2 rounded w-full'>
 
                     {
-                      routeData?.data.map((r) => (<option value={r.route}> {r.route} </option>))
+                      errors.route &&
+                      <p className="text-red-700 text-sm">  {errors.route.message} </p>
                     }
-                  </datalist>
 
-
-
-                  {
-                    errors.route &&
-                    <p className="text-red-700 text-sm">  {errors.route.message} </p>
-                  }
-
-                </div>
+                  </div>
+                  :
+                  <></>
               }
 
             </div>
@@ -716,13 +727,13 @@ const TripHome = () => {
             </div>
 
             :
-            (data && data.data.length) > 0 ?
+            (data && data?.data.length) > 0 ?
 
               <div className="flex flex-col gap-y-5">
                 {/* // cards display here   */}
                 <div className="py-5 grid grid-cols-4  gap-3  w-full">
 
-                  {data.data.map((t) =>
+                  {data?.data.map((t) =>
 
                     <VehicleCard
                       key={t._id}

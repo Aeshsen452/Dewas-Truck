@@ -238,6 +238,7 @@ const HomePage = () => {
                             </div>
                             <Pagination align="center" defaultCurrent={currentPage} total={data.total}
                                 pageSize={itemPerPage}
+                                showSizeChanger={false}
                                 onChange={(key) => setCurrentPage(key)}
                             />
 
