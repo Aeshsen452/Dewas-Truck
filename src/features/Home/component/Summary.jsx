@@ -54,7 +54,20 @@ const Summary = ({data}) => {
                                     </div>
 
 
-<form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-y-2">           
+<form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-y-2">   
+
+
+                              {/* Extra Duites          */}
+
+                              
+                                            <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-500">
+                                            Extra Duty
+                                        </span>
+                                        <input
+                                          {...register("extraDuty")}
+                                         className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
+                                    </div>
 
 
                                        {/* extra diesel amount */}
@@ -124,7 +137,7 @@ const Summary = ({data}) => {
                                             <span className="text-xl font-bold text-green-600">
                                                 ₹
                                                {
-                                                Number(newData.Salary)-Number(Deducteddata.advanced)-Number(Deducteddata.esic)-Number(Deducteddata.extraDiesel)-Number(Deducteddata.pf)
+                                                Number(newData.Salary)+ Number(Deducteddata.extraDuty || 0)-Number(Deducteddata.advanced ||0)-Number(Deducteddata.esic || 0)-Number(Deducteddata.extraDiesel || 0)-Number(Deducteddata.pf||0)
                                                }
                                             </span>
                                         </div>

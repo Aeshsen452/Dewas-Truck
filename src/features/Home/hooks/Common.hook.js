@@ -7,7 +7,6 @@ const useCommonHook = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleFormSubmit = (data) => {
-    
         setIsOpen(true);
         setData(data)
     }

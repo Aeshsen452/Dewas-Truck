@@ -37,15 +37,13 @@ export default function DriverRow({ data }) {
                 {/* Timing */}
                 <div className="flex items-center gap-3 text-sm whitespace-nowrap">
                     <span className="font-semibold text-green-600">
-                        🟢 {data.Early}
+                        On-Time : {data.Early}
                     </span>
 
-                    <span className="font-semibold text-blue-600">
-                        🔵 {data.OnTime}
-                    </span>
+
 
                     <span className="font-semibold text-red-600">
-                        🔴 {data.Late}
+                        Late : {data.Late}
                     </span>
                 </div>
 
@@ -88,18 +86,18 @@ export default function DriverRow({ data }) {
 
                                 <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
-                                        <span className="text-gray-500">Early</span>
+                                        <span className="text-gray-500">On-Time</span>
                                         <span className="font-semibold text-green-600">
                                             {data.Early}
                                         </span>
                                     </div>
 
-                                    <div className="flex justify-between">
+                                    {/* <div className="flex justify-between">
                                         <span className="text-gray-500">On Time</span>
                                         <span className="font-semibold text-blue-600">
                                             {data.OnTime}
                                         </span>
-                                    </div>
+                                    </div> */}
 
                                     <div className="flex justify-between">
                                         <span className="text-gray-500">Late</span>
