@@ -324,7 +324,9 @@ const TripHome = () => {
 
 
                 <Pagination align="center" defaultCurrent={currentPage} pageSize={itemPerPage}
-                  total={data?.total} onChange={(key) => setCurrentPage(key)}
+                  total={data?.total}
+                  showSizeChanger={false}
+                  onChange={(key) => setCurrentPage(key)}
 
                 />
 
