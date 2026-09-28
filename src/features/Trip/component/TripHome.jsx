@@ -4,7 +4,7 @@ import DataNotFound from "../../../components/NotFound";
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
 import TripCard from "./tripCard";
 import SearchBar from "../../../components/SearchBar";
-import { useGetTrip, useAddTrip, useDeletTrip, useUpdateTrip, useBulkAddTrip } from "../hooks/api.hook";
+import { useGetTrip, useAddTrip, useDeletTrip, useUpdateTrip, useBulkAddTrip, useExportBulkTrip } from "../hooks/api.hook";
 import { useGetDriver } from "../../driver/hooks/api.hooks";
 import { useGetVehicle } from "../../vehicles/hooks/api.hooks";
 import { useGetRoute } from "../../triproute/hooks/route.hooks";
@@ -17,6 +17,7 @@ import ErrorComponent from "../../../components/ErrorMessage";
 import VehicleCard from "./tripShortCard";
 import useModal from "../../../components/Modal/Modal";
 import { Pagination } from "antd";
+import ActionLoader from "../../../components/Loader/ActionLoader";
 
 const TripHome = () => {
 
@@ -60,6 +61,8 @@ const TripHome = () => {
   const { bulkAddTrip, bulkPending, bulkError, progress, excelFile } = useBulkAddTrip();
 
   const { contextHolder, handleClick } = useModal();
+
+  const { ExportData, ExportPending } = useExportBulkTrip();
 
 
 
@@ -105,7 +108,14 @@ const TripHome = () => {
                 >
                   <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={openFileBox}>Import <Upload size={15} /></button>
 
-                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2'>Export <Download size={15} /> </button>
+                  <button className='hover:font-bold text-sm  hover:border-b-2 hover:border-blue-700 cursor-pointer flex justify-center items-center gap-x-2' onClick={ExportData}>
+
+                    {ExportPending ? <ActionLoader /> :
+                      <>  Export <Download size={15} />    </>
+
+                    }
+
+                  </button>
 
 
                 </div>

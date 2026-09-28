@@ -54,3 +54,14 @@ export const bulkTripApi = async (file, setprogress) => {
     }
 }
 
+export const bulkExportTripApi = async () => {
+    try {
+        const { data } = await AxiosInstance.get("/trip/bulk", {
+            responseType: "blob"
+        })
+        return data
+    } catch (error) {
+        throw error
+    }
+}
+

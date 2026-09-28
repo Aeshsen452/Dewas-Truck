@@ -53,17 +53,7 @@ const useTripHook = () => {
     //    watch the value of route to auto fill the touching point and enable loaded and unloaded 
     const point = watch("route");
 
-    const dateHtml = watch("date");
 
-
-    useEffect(() => {
-        console.log("Html Date", dateHtml)
-
-    }, [dateHtml])
-
-
-
-    console.log("checking ", point)
 
     // this fn check if points changes 
     useEffect(() => {
