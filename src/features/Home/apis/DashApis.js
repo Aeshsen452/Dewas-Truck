@@ -9,3 +9,12 @@ export const GetDashApi = async (url) => {
     }
 
 }
+
+export const GetDriverApi = async () => {
+    try {
+        const { data } = await AxiosInstance.get("/dash/driver");
+        return data
+    } catch (error) {
+        throw error
+    }
+}

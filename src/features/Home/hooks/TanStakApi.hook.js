@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { GetDashApi } from "../apis/DashApis"
+import { GetDashApi, GetDriverApi } from "../apis/DashApis"
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -40,5 +40,15 @@ export const useGetDashBoardData = () => {
         itemPerPage
 
     }
+
+}
+
+export const useGetDriverData = () => {
+    return useQuery({
+        queryKey: ["driver"],
+        queryFn: GetDriverApi,
+        staleTime: 50000
+
+    });
 
 }

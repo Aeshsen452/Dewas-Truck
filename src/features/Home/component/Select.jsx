@@ -7,10 +7,18 @@ const SelectComponent = ({ data }) => {
     const dispatch = useDispatch();
     const { selectedDriver } = useSelector((state) => state.dash)
 
+
     const options = data.data.map((item) => ({
         value: item.driverName,
         label: item.driverName,
     }));
+
+    options.unshift(
+        {
+            value: "",
+            label: "Select an option"
+        }
+    )
 
     const handleChange = value => {
         dispatch(SelectingDriver(value))

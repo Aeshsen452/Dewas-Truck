@@ -1,12 +1,13 @@
 import { Truck, ChevronDown } from 'lucide-react';
-import { useGetDriver } from '../../driver/hooks/api.hooks';
 import DataSpinner from '../../../components/Loader/DataSpinner';
 import ErrorComponent from '../../../components/ErrorMessage';
 import SelectComponent from './Select';
+import { useGetDriverData } from '../hooks/TanStakApi.hook';
 
 const DriverSelectCard = () => {
 
-    const { data: drivers, isPending, error } = useGetDriver();
+    const { data: drivers, isPending, error } = useGetDriverData();
+
 
     if (error) {
         return <ErrorComponent />
