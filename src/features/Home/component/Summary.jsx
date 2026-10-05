@@ -3,29 +3,18 @@ import useCommonHook from "../hooks/Common.hook";
 
 const Summary = ({data}) => {
 
-   const newData = data.reduce((acc, curr) => {
- 
-  const extractData = Object.values(curr.data); 
+   let rps = 0;
+   let TotalSalary = 0;
 
-
-  const objectData = extractData.reduce((innerAcc, innerCurr) => {
-    const { Salary, rps } = innerCurr;
-    innerAcc.Salary += Number(Salary || 0);
-    innerAcc.rps += Number(rps || 0);
-    return innerAcc;
-  }, { Salary: 0, rps: 0 });
-
-  
-  acc.Salary += objectData.Salary;
-  acc.rps += objectData.rps;
-
-  return acc;
-}, { Salary: 0, rps: 0 });
-
+   data.forEach((item)=>{
+     item.routes.forEach((d)=>{
+        TotalSalary+=d.TotalSalary;
+        rps+=d.TotalTrip
+     })
+   })
 
       const {register,isOpen, handleSubmit,handleFormSubmit,Deducteddata} = useCommonHook();
     
-
   return (
    <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
                                 <h3 className="font-semibold text-gray-900">
@@ -38,7 +27,7 @@ const Summary = ({data}) => {
                                             Gross Salary
                                         </span>
                                         <span className="font-semibold text-gray-900">
-                                            ₹{newData.Salary}
+                                            ₹{TotalSalary}
                                         </span>
                                     </div>
 
@@ -49,7 +38,7 @@ const Summary = ({data}) => {
                                             Total Trip
                                         </span>
                                         <span className="font-semibold">
-                                            {newData.rps}
+                                            {rps}
                                         </span>
                                     </div>
 

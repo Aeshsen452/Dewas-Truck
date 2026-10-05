@@ -8,7 +8,7 @@ export const useGetDashBoardData = () => {
     const { calender, selectedDriver } = useSelector((state) => state.dash);
     const [debouceSearch, setDebounceSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemPerPage = 10;
+    const itemPerPage = 5;
 
 
     useEffect(() => {

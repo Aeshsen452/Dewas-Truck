@@ -2,12 +2,15 @@ import SalarySummary from "./Metric";
 import Metric from "./Metric";
 
 const DriverTree = ({ data }) => {
-  const vehicleNumber = data.key;
+  // const vehicleNumber = data.key;
 
-  const routeData = Object.entries(data.data).map(([route, values]) => ({
-    route,
-    ...values
-  }));
+  // const routeData = Object.entries(data.data).map(([route, values]) => ({
+  //   route,
+  //   ...values
+  // }));
+
+
+
 
 
   return (
@@ -18,7 +21,7 @@ const DriverTree = ({ data }) => {
 
         <div className="flex h-12 min-w-[120px] items-center justify-center rounded-xl bg-blue-50 px-4">
           <span className="font-bold text-blue-700">
-            {vehicleNumber}
+            {data._id}
           </span>
         </div>
 
@@ -29,7 +32,7 @@ const DriverTree = ({ data }) => {
       {/* ROUTES */}
       <div className="relative ml-6 mt-5 border-l-2 border-slate-200 pl-7">
 
-        {routeData.map((route, index) => (
+        {data.routes.map((route, index) => (
 
           <div
             key={index}

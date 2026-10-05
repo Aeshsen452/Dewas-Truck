@@ -92,16 +92,18 @@ export default function DriverDashboard() {
                                             }
 
                                         </div>
-                                        <Pagination
-                                            pageSize={itemPerPage}
-                                            total={data.total}
-                                            defaultCurrent={currentPage}
-                                            showSizeChanger={false}
-                                            align="center"
-                                            onChange={(key) => setCurrentPage(key)}
 
-                                        />
+                                        {data.total > itemPerPage &&
+                                            <Pagination
+                                                pageSize={itemPerPage}
+                                                total={data.total}
+                                                defaultCurrent={currentPage}
+                                                showSizeChanger={false}
+                                                align="center"
+                                                onChange={(key) => setCurrentPage(key)}
 
+                                            />
+                                        }
                                     </>
 
                                     : <DataNotFound />

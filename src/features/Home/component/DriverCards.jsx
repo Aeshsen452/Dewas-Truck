@@ -1,10 +1,7 @@
 import { useState } from "react";
 
 export default function DriverRow({ data }) {
-
-    console.log("lele ", data)
     const [expanded, setExpanded] = useState(false);
-
     return (
         <div
             onClick={() => setExpanded(!expanded)}
@@ -16,14 +13,21 @@ export default function DriverRow({ data }) {
                 {/* Driver */}
                 <div className="min-w-[150px]">
                     <p className="text-sm font-bold text-gray-800">
-                        {data.driverName}
+                        {/* {data.driverName} */}
+
+                        {data._id}
                     </p>
                 </div>
 
                 {/* Trips */}
                 <div className="text-sm whitespace-nowrap">
                     <span className="text-gray-500">Trips:</span>{" "}
-                    <span className="font-semibold">{data.TotalRps}</span>
+                    <span className="font-semibold">
+                        {/* {data.TotalRps} */}
+                        {data.TotalTrip}
+
+
+                    </span>
                 </div>
 
                 {/* Salary */}
@@ -37,7 +41,7 @@ export default function DriverRow({ data }) {
                 {/* Timing */}
                 <div className="flex items-center gap-3 text-sm whitespace-nowrap">
                     <span className="font-semibold text-green-600">
-                        On-Time : {data.Early}
+                        On-Time : {data.OnTime}
                     </span>
 
 
@@ -49,12 +53,12 @@ export default function DriverRow({ data }) {
 
                 {/* Route Preview */}
                 <div className="flex-1 truncate text-sm text-gray-500">
-                    {data.Route.join(" → ")}
+                    {data.TotalRoute.join(" → ")}
                 </div>
 
                 {/* Vehicle Preview */}
                 <div className="whitespace-nowrap text-sm font-semibold text-purple-600">
-                    🚛 {data.Vehicles[0]}
+                    🚛 {data.TotalVehicles[0]}
                 </div>
 
                 {/* Arrow */}
@@ -88,7 +92,7 @@ export default function DriverRow({ data }) {
                                     <div className="flex justify-between">
                                         <span className="text-gray-500">On-Time</span>
                                         <span className="font-semibold text-green-600">
-                                            {data.Early}
+                                            {data.OnTime}
                                         </span>
                                     </div>
 
@@ -115,7 +119,7 @@ export default function DriverRow({ data }) {
                                 </h3>
 
                                 <div className="space-y-2">
-                                    {data.Route.map((route, index) => (
+                                    {data.TotalRoute.map((route, index) => (
                                         <div
                                             key={index}
                                             className="flex items-center gap-2 rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-700"
@@ -134,7 +138,7 @@ export default function DriverRow({ data }) {
                                 </h3>
 
                                 <div className="flex flex-wrap gap-2">
-                                    {data.Vehicles.map((vehicle, index) => (
+                                    {data.TotalVehicles.map((vehicle, index) => (
                                         <span
                                             key={index}
                                             className="rounded-md bg-purple-100 px-3 py-2 text-sm font-semibold text-purple-700"
@@ -152,7 +156,7 @@ export default function DriverRow({ data }) {
                             <div>
                                 <span className="text-xs text-gray-400">Total Trips</span>
                                 <p className="font-bold text-gray-800">
-                                    {data.TotalRps}
+                                    {data.TotalTrip}
                                 </p>
                             </div>
 
@@ -166,14 +170,14 @@ export default function DriverRow({ data }) {
                             <div>
                                 <span className="text-xs text-gray-400">Total Routes</span>
                                 <p className="font-bold text-gray-800">
-                                    {data.Route.length}
+                                    {data.TotalRoute.length}
                                 </p>
                             </div>
 
                             <div>
                                 <span className="text-xs text-gray-400">Total Vehicles</span>
                                 <p className="font-bold text-gray-800">
-                                    {data.Vehicles.length}
+                                    {data.TotalVehicles.length}
                                 </p>
                             </div>
                         </div>

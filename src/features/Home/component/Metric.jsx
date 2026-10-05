@@ -3,14 +3,14 @@
 
 const SalarySummary = ({ data }) => {
 
-  const { rps, TripAmount, Early, IncentiveAmount, Late, refund, Salary_Deducted, Diesel } = data
+  const { TotalTrip, TripAmount, totalOnTime, OnTimeIncentive, totalLate, Refund, OnLateCharge, DieselUsed } = data
 
-  const rpsTotal = rps * TripAmount;
-  const incentiveTotal = Early * IncentiveAmount;
-  const penaltyTotal = Salary_Deducted;
+  const rpsTotal = TotalTrip * TripAmount;
+  const incentiveTotal = totalOnTime * OnTimeIncentive;
+  const penaltyTotal = OnLateCharge * totalLate;
 
   const totalSalary =
-    rpsTotal + incentiveTotal - penaltyTotal + refund;
+    rpsTotal + incentiveTotal - penaltyTotal + Refund;
 
 
 
@@ -23,7 +23,7 @@ const SalarySummary = ({ data }) => {
         {/* RPS */}
         <div className="flex flex-col items-center justify-center">
           <span className="font-semibold">Rps</span>
-          <span>{rps}</span>
+          <span>{TotalTrip}</span>
 
         </div>
 
@@ -49,13 +49,13 @@ const SalarySummary = ({ data }) => {
 
         <div className="flex flex-col items-center justify-center">
           <span className="font-semibold">On Time </span>
-          <span>{Early}</span>
+          <span>{totalOnTime}</span>
 
         </div>
 
         <div className="flex flex-col items-center justify-center">
           <span className="font-semibold"> Amount</span>
-          <span>₹{IncentiveAmount}</span>
+          <span>₹{OnTimeIncentive}</span>
 
         </div>
 
@@ -76,7 +76,7 @@ const SalarySummary = ({ data }) => {
 
         <div className="flex flex-col items-center justify-center text-red-600 ">
           <span className="font-semibold">Late Rps </span>
-          <span>{Late}</span>
+          <span>{totalLate}</span>
 
         </div>
 
@@ -97,7 +97,7 @@ const SalarySummary = ({ data }) => {
         <div className="flex flex-col items-center justify-center text-orange-400">
           <span className="font-semibold">Refund</span>
           <span className="font-semibold ">
-            ₹{refund}
+            ₹{Refund}
           </span>
 
         </div>
@@ -121,7 +121,7 @@ const SalarySummary = ({ data }) => {
         <div className="flex flex-col items-center justify-center ">
           <span className="font-semibold"> Diesel</span>
           <span className="font-semibold ">
-            {Diesel}
+            {DieselUsed}
           </span>
 
         </div>
