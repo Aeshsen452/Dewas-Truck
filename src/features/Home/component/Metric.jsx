@@ -3,11 +3,13 @@
 
 const SalarySummary = ({ data }) => {
 
-  const { TotalTrip, TripAmount, totalOnTime, OnTimeIncentive, totalLate, Refund, OnLateCharge, DieselUsed } = data
+
+
+  const { TotalTrip, TripAmount, totalOnTime, OnTimeIncentive, totalLate, Refund, TotalLateDeduction, DieselUsed } = data
 
   const rpsTotal = TotalTrip * TripAmount;
   const incentiveTotal = totalOnTime * OnTimeIncentive;
-  const penaltyTotal = OnLateCharge * totalLate;
+  const penaltyTotal = TotalLateDeduction;
 
   const totalSalary =
     rpsTotal + incentiveTotal - penaltyTotal + Refund;

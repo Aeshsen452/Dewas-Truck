@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import { GetDashApi, GetDriverApi } from "../apis/DashApis"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { GetDashApi, GetDriverApi, SaveSalaryData, GetSalaryData, UpdateSalaryData } from "../apis/DashApis"
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export const useGetDashBoardData = () => {
     const [search, setSearch] = useState("");
@@ -50,5 +51,64 @@ export const useGetDriverData = () => {
         staleTime: 50000
 
     });
+
+}
+
+export const useGetSalarySumery = () => {
+    const { calender, selectedDriver } = useSelector((state) => state.dash);
+    const url = `/summary?driverName=${selectedDriver}&&Calender=${calender}`
+
+    const { data, isPending, isError } = useQuery({
+        queryKey: ["Salarykey", calender, selectedDriver],
+        queryFn: () => GetSalaryData(url)
+    })
+    return { SalaryData: data, SalaryPending: isPending }
+}
+
+export const useSaveSalaryData = () => {
+
+    const queryClient = useQueryClient();
+
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: SaveSalaryData,
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: ["Salarykey"]
+            });
+            toast.success(data?.message || "Submitted");
+
+        },
+        onError: (error) => {
+            console.log(error)
+            toast.error(error?.response?.data?.message || "Something went wrong saving ");
+        }
+    });
+    return {
+        CreateSalaryFn: mutate,
+        createSalaryPending: isPending,
+        createSalaryError: isError
+    }
+}
+
+export const useUpdateSalary = () => {
+    const queryClient = useQueryClient();
+    const { mutate, isPending, isError } = useMutation({
+        mutationFn: UpdateSalaryData,
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: ["Salarykey"]
+            });
+            toast.success(data?.message || "updated successfully")
+        },
+        onError: (error) => {
+            toast.error(error?.response?.data?.message || "Something went wrong ")
+        }
+    });
+
+    return {
+        updateMutate: mutate,
+        updatePending: isPending,
+        updateError: isError
+    }
 
 }

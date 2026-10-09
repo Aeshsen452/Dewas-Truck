@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCommonHook from "../hooks/Common.hook";
+import { useSelector } from "react-redux";
+import { useGetSalarySumery,useSaveSalaryData, useUpdateSalary } from "../hooks/TanStakApi.hook";
+import ActionLoader from "../../../components/Loader/ActionLoader";
 
 const Summary = ({data}) => {
 
@@ -13,7 +16,20 @@ const Summary = ({data}) => {
      })
    })
 
-      const {register,isOpen, handleSubmit,handleFormSubmit,Deducteddata} = useCommonHook();
+      const {register,isOpen, handleSubmit,Deducteddata,setIsOpen,setData,reset} = useCommonHook();
+      const {calender,selectedDriver} = useSelector((state)=>state.dash);
+      const {SalaryData,SalaryPending} = useGetSalarySumery();
+      const {CreateSalaryFn,createSalaryPending,createSalaryError} = useSaveSalaryData();
+     const  {updateMutate, updatePending,updateError} = useUpdateSalary();
+
+
+   useEffect(()=>{
+    if(SalaryData?.data){
+        reset(SalaryData.data);
+        setData(SalaryData.data)
+    }
+   },[SalaryData])
+  
     
   return (
    <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
@@ -31,8 +47,6 @@ const Summary = ({data}) => {
                                         </span>
                                     </div>
 
-                              
-
                                             <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-500">
                                             Total Trip
@@ -43,18 +57,35 @@ const Summary = ({data}) => {
                                     </div>
 
 
-<form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col gap-y-2">   
+                                    
+                                    
 
+{calender &&  SalaryPending &&
+  <div className="flex justify-center items-center">
+
+      <ActionLoader/>
+  </div>
+}
+   
+   {
+   calender &&  SalaryData &&
+
+              <form 
+              onSubmit={handleSubmit((data)=> 
+                SalaryData?.data?._id ?
+                 updateMutate(data)
+                 : CreateSalaryFn({...data,calender,selectedDriver}) 
+            )} 
+              className="flex flex-col gap-y-2">   
 
                               {/* Extra Duites          */}
 
-                              
                                             <div className="flex items-center justify-between">
                                         <span className="text-sm text-gray-500">
                                             Extra Duty
                                         </span>
                                         <input
-                                          {...register("extraDuty")}
+                                          {...register("extraDuty",{})}
                                          className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
                                     </div>
 
@@ -109,16 +140,9 @@ const Summary = ({data}) => {
 
 
 {
-    !isOpen  ?
+    SalaryData?.data?._id  ?
 
-     <div className="flex justify-end items-center p-3">
-                               <button className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 cursor-pointer" type="submit"> Save </button>
-                                     </div>
-
-
-    :
-
-           <div className="border-t border-gray-100 pt-2">
+      <div className="border-t border-gray-100 pt-2">
                                         <div className="flex items-center justify-between">
                                             <span className="font-medium text-gray-700">
                                                 Net Salary
@@ -130,7 +154,17 @@ const Summary = ({data}) => {
                                                }
                                             </span>
                                         </div>
+
+                                        <div className="flex justify-end items-center py-3">
+                                        <button className="p-2 bg-green-700 rounded text-sm text-white cursor-pointer">Update</button>
+                                        </div>
                                     </div>
+
+    :
+
+     <div className="flex justify-end items-center p-3">
+                               <button className="bg-green-600 text-sm text-white py-2 px-4 rounded-md hover:bg-green-700 cursor-pointer" type="submit"> Save </button>
+                                     </div>
 
 
 }
@@ -138,8 +172,10 @@ const Summary = ({data}) => {
 
                                     
                                      
-</form>
-                             
+               </form>
+                        
+                        
+}
 
                                    
                                 </div>
