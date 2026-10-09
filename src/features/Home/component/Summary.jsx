@@ -16,7 +16,7 @@ const Summary = ({data}) => {
      })
    })
 
-      const {register,isOpen, handleSubmit,Deducteddata,setIsOpen,setData,reset} = useCommonHook();
+      const {register,handleSubmit,Deducteddata,setData,reset,setAmount} = useCommonHook();
       const {calender,selectedDriver} = useSelector((state)=>state.dash);
       const {SalaryData,SalaryPending} = useGetSalarySumery();
       const {CreateSalaryFn,createSalaryPending,createSalaryError} = useSaveSalaryData();
@@ -28,7 +28,12 @@ const Summary = ({data}) => {
         reset(SalaryData.data);
         setData(SalaryData.data)
     }
-   },[SalaryData])
+   },[SalaryData]);
+
+
+   useEffect(()=>{
+   setAmount(TotalSalary)
+   },[TotalSalary])
   
     
   return (
@@ -102,6 +107,22 @@ const Summary = ({data}) => {
                                           {...register("extraDiesel")}
                                          className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
                                     </div>
+
+
+                                    {/* Cumaltive  */}
+
+
+                                         <div className="flex items-center justify-between border-b border-amber-200">
+                                        <span className="text-sm text-gray-500">
+                                           Cumaltive Amount
+                                        </span>
+                                        <input
+                                        disabled={true}
+                                          {...register("cumaltiveAmount")}
+                                         className="w-32 font-semibold outline-none border border-gray-300 rounded-md py-1 px-2" type="number" />
+                                    </div>
+
+
 
 
                             {/* Pf */}
