@@ -1,4 +1,5 @@
 import { NavLink } from "react-router";
+import UserMenu from "./userAccount";
 
 const Navbar = () => {
     return (
@@ -17,7 +18,7 @@ const Navbar = () => {
 
                 {/* Center */}
 
-                <div className="flex flex-1 justify-center">
+                <div className="flex flex-1 justify-center hidden lg:flex">
                     <div className="flex items-center gap-8">
                         <NavLink
                             to="/main"
@@ -82,8 +83,8 @@ const Navbar = () => {
                 </div>
 
                 {/* Right */}
-                <div className="flex flex-1 justify-end">
-                    Account
+                <div className="flex flex-1 justify-end text-base ">
+                    <UserMenu />
                 </div>
 
             </div>

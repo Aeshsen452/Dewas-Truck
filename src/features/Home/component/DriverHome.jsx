@@ -1,7 +1,7 @@
 
 import DriverSelectCard from "./DriverSelectCard";
 import MonthCalender from "./MonthCalender";
-import { useGetDashBoardData } from "../hooks/TanStakApi.hook";
+import { useGetDashBoardData, useGetMonthlySalary } from "../hooks/TanStakApi.hook";
 import DataFetchingSpinner from "../../../components/Loader/DataFetchingSpinner";
 import DriverTree from "./Tree";
 import NoDriverSelected from "./NoDriverSelected";
@@ -11,30 +11,40 @@ import DataNotFound from "../../../components/NotFound";
 import { useSelector } from "react-redux";
 import SearchBar from "../../../components/SearchBar";
 import { Pagination } from "antd";
+import { FileDown } from "lucide-react"
 
 export default function DriverDashboard() {
 
 
-    const { selectedDriver } = useSelector((state) => state.dash);
+    const { selectedDriver, calender } = useSelector((state) => state.dash);
     const { data, isPending, error, setSearch, search, currentPage,
         setCurrentPage,
         itemPerPage
     } = useGetDashBoardData();
 
+    const { ExportData, ExportPending } = useGetMonthlySalary()
+
     return (
         <div className=" bg-gray-50">
             {/* Header */}
-            <header className="pt-3 flex w-full justify-end">
+            <header className="pt-3 flex flex-col w-full justify-end">
 
                 <MonthCalender />
+                {
+                    !selectedDriver && calender && data && data.data.length > 0 &&
+                    <div className="flex justify-end py-3 px-8 text-sm">
+                        <button className="flex gap-x-1 cursor-pointer" onClick={ExportData}> <FileDown size={18} className="text-green-600" /> Download Report </button>
+                    </div>
+                }
+
             </header>
 
             {/* Main */}
-            <main className="flex px-6 py-4 gap-x-5 min-h-[80vh] overflow-hidden">
+            <main className="flex flex-col lg:flex-row px-6 py-4 gap-x-5 lg:min-h-[80vh] overflow-hidden">
 
 
                 {/* Sidebar */}
-                <aside className="w-3/12 space-y-5 ">
+                <aside className="lg:w-3/12 space-y-5 ">
                     <DriverSelectCard />
                     {
                         selectedDriver && data && data.data.length > 0 &&
@@ -46,7 +56,7 @@ export default function DriverDashboard() {
 
 
 
-                <section className="w-9/12 overflow-y-auto relative">
+                <section className="lg:w-9/12 overflow-y-auto relative">
 
 
                     {!selectedDriver &&

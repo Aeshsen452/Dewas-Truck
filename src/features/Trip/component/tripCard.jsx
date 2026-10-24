@@ -32,7 +32,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
     return (
         <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full overflow-hidden  px-2 ">
+            className="w-full overflow-hidden lg:px-2  ">
             {/* Header */}
             <div className="border-b border-gray-100">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -70,7 +70,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                     </div>
 
                     <div className="flex flex-wrap gap-2">
-                        <span className="rounded-full bg-blue-50 px-3 py-1  font-semibold text-blue-700">
+                        <span className="rounded-full bg-blue-50 lg:px-3 py-1  font-semibold text-blue-700">
                             RPS: {data.rps}
                         </span>
 
@@ -101,9 +101,9 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
             </div>
 
             {/* Main Details */}
-            <div className="">
+            <div className="my-2">
                 {/* Vehicle / Driver */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-3 py-4 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <InfoItem label="Driver" value={data.driverName} />
                     <InfoItem label="Vehicle Number" value={data.vehicleNumber} />
                     {data.touchingPoint && <InfoItem label="Touching Point" value={data.touchingPoint} />}
@@ -112,13 +112,13 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
                 </div>
 
                 {/* Timeline */}
-                <div className="my-6 border-t border-gray-100" />
+                <div className="lg:my-6 my-2 border-t border-gray-100" />
 
                 <h3 className="mb-4  font-semibold text-gray-900">
                     Trip Timeline
                 </h3>
 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <TimeItem
                         label="Dispatch Time"
                         value={formatDateTime(data.dispatchTime)}
@@ -289,7 +289,7 @@ export default function TripCard({ data, handleDelete, deletePending, deleteId, 
 
 
 
-           
+
 
         </div>
     );

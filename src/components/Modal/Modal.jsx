@@ -7,9 +7,12 @@ const useModal = () => {
     const [modal, contextHolder] = Modal.useModal();
     const handleClick = (data) => {
         const modalConfig = {
-            content: <TripCard data={data} />
+            content: <TripCard data={data} />,
+            okButtonProps: {
+                style: { display: 'none' }
+            }
         };
-        modal.confirm({ ...modalConfig, mask: { blur: true }, width:"100%" });
+        modal.confirm({ ...modalConfig, mask: { blur: true }, width: "100%" });
     }
     return {
         contextHolder,

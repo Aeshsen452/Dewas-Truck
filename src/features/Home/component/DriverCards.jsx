@@ -8,10 +8,10 @@ export default function DriverRow({ data }) {
             className="w-full cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:border-blue-300"
         >
             {/* ================= COLLAPSED ROW ================= */}
-            <div className="h-[50px] min-w-[900px] flex items-center gap-6 px-4">
+            <div className="lg:h-[50px] lg:min-w-[900px] lg:flex grid grid-cols-4 items-center gap-6 px-5 py-2">
 
                 {/* Driver */}
-                <div className="min-w-[150px]">
+                <div className="lg:min-w-[150px] col-span-2">
                     <p className="text-sm font-bold text-gray-800">
                         {/* {data.driverName} */}
 
@@ -20,7 +20,7 @@ export default function DriverRow({ data }) {
                 </div>
 
                 {/* Trips */}
-                <div className="text-sm whitespace-nowrap">
+                <div className="text-sm whitespace-nowrap flex lg:flex-row flex-col">
                     <span className="text-gray-500">Trips:</span>{" "}
                     <span className="font-semibold">
                         {/* {data.TotalRps} */}
@@ -31,7 +31,7 @@ export default function DriverRow({ data }) {
                 </div>
 
                 {/* Salary */}
-                <div className="text-sm whitespace-nowrap">
+                <div className="text-sm whitespace-nowrap flex lg:flex-row flex-col">
                     <span className="text-gray-500">Salary:</span>{" "}
                     <span className="font-semibold text-green-600">
                         ₹{data.TotalSalary.toLocaleString("en-IN")}
@@ -39,12 +39,10 @@ export default function DriverRow({ data }) {
                 </div>
 
                 {/* Timing */}
-                <div className="flex items-center gap-3 text-sm whitespace-nowrap">
+                <div className="lg:flex items-center  lg:gap-2 text-sm whitespace-nowrap hidden">
                     <span className="font-semibold text-green-600">
                         On-Time : {data.OnTime}
                     </span>
-
-
 
                     <span className="font-semibold text-red-600">
                         Late : {data.Late}
@@ -52,18 +50,18 @@ export default function DriverRow({ data }) {
                 </div>
 
                 {/* Route Preview */}
-                <div className="flex-1 truncate text-sm text-gray-500">
+                <div className="hidden lg:block flex-1 truncate text-sm text-gray-500">
                     {data.TotalRoute.join(" → ")}
                 </div>
 
                 {/* Vehicle Preview */}
-                <div className="whitespace-nowrap text-sm font-semibold text-purple-600">
+                <div className="hidden lg:block whitespace-nowrap text-sm font-semibold text-purple-600">
                     🚛 {data.TotalVehicles[0]}
                 </div>
 
                 {/* Arrow */}
                 <div
-                    className={`text-gray-400 transition-transform duration-300 ${expanded ? "rotate-180" : ""
+                    className={`hidden lg:block text-gray-400 transition-transform duration-300 ${expanded ? "rotate-180" : ""
                         }`}
                 >
                     ▼

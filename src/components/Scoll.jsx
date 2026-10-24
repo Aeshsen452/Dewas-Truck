@@ -22,9 +22,9 @@ const Scroll = () => {
     return (
         <>
             {(scrollPosition > 550) ?
-                <button type='button' className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </button>
+                <button type='button' className="hidden bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 lg:flex justify-center items-center rounded-full cursor-pointer " onClick={scrollTop}>  <ArrowBigUpDash />   </button>
                 :
-                <button type='button' className="bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 flex justify-center items-center rounded-full cursor-pointer " onClick={scrollDown}>  <ArrowBigDownDash />   </button>
+                <button type='button' className=" hidden bg-green-700 text-white bottom-10 fixed right-10 w-10 h-10 lg:flex justify-center items-center rounded-full cursor-pointer " onClick={scrollDown}>  <ArrowBigDownDash />   </button>
             }
         </>
     )

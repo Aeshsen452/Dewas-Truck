@@ -52,3 +52,14 @@ export const UpdateSalaryData = async (payload) => {
     }
 
 }
+
+export const GetMonthlySalary = async (url) => {
+    try {
+        const { data } = await AxiosInstance.get(url, {
+            responseType: "blob"
+        })
+        return data
+    } catch (error) {
+        throw error
+    }
+}

@@ -6,9 +6,9 @@ const DriverCard = ({ v, handleDeleteDriver, update, deletePending, deleteId }) 
     const deleting = deletePending && deleteId === v._id
 
     return (
-        <div 
-         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-xl shadow-md p-4 border border-gray-200 flex flex-col gap-y-1">
+        <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-xl shadow-md p-4 border border-gray-200 flex flex-col gap-y-1 reveal">
             <h5 className=" font-semibold text-gray-800 col-span-2 flex items-center gap-x-2">
                 <UserStar size={18} className="text-green-500" />
                 : {v.driverName}

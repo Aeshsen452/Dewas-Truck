@@ -83,13 +83,13 @@ const TripHome = () => {
 
       {/* header portion  */}
       <div className=" w-full">
-        <div className="flex justify-between items-center p-3 gap-x-5  relative">
+        <div className="flex flex-col lg:flex-row justify-between items-center  gap-x-5  relative">
 
-          <div className="flex-1">
+          <div className="lg:flex-1 w-full">
             <SearchBar search={search} setSearch={setSearch} />
           </div>
 
-          <div className="flex-1 flex justify-end items-center p-3 gap-x-5  relative">
+          <div className="flex-1 lg:flex justify-end items-center p-3 gap-x-5 hidden  relative">
 
 
             <div className='relative w-20 flex justify-end  h-10'
@@ -731,7 +731,7 @@ const TripHome = () => {
 
               <div className="flex flex-col gap-y-5">
                 {/* // cards display here   */}
-                <div className="py-5 grid grid-cols-4  gap-3  w-full">
+                <div className="py-5 grid lg:grid-cols-4  gap-3  w-full">
 
                   {data?.data.map((t) =>
 

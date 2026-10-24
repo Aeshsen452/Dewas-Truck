@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { GetDashApi, GetDriverApi, SaveSalaryData, GetSalaryData, UpdateSalaryData } from "../apis/DashApis"
+import { GetDashApi, GetDriverApi, SaveSalaryData, GetSalaryData, UpdateSalaryData, GetMonthlySalary } from "../apis/DashApis"
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -111,4 +111,32 @@ export const useUpdateSalary = () => {
         updateError: isError
     }
 
+}
+
+
+export const useGetMonthlySalary = () => {
+    const { calender, selectedDriver } = useSelector((state) => state.dash);
+
+    const url = `/dash/export?calender=${calender}&&driver=${selectedDriver}`
+    const { mutate, isPending } = useMutation({
+        mutationFn: () => GetMonthlySalary(url),
+        onSuccess: (blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "DriverMonthlySalaryreport.xlsx";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success("Excel file downloaded successfully!")
+        },
+        onError: (error) => {
+            toast.error(error.response?.data.message || "Failed to downold excel file");
+        }
+    })
+    return {
+        ExportData: mutate,
+        ExportPending: isPending,
+    }
 }
