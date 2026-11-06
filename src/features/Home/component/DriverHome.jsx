@@ -27,9 +27,9 @@ export default function DriverDashboard() {
     const { ExportData, ExportPending } = useGetMonthlySalary()
 
 
-    if (isPending) {
-        return <Preloader />
-    }
+    // if (isPending) {
+    //     return <Preloader />
+    // }
 
     return (
         <div className=" bg-gray-50">
