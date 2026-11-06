@@ -13,6 +13,8 @@ import SearchBar from "../../../components/SearchBar";
 import { Pagination } from "antd";
 import { FileDown } from "lucide-react"
 
+import Preloader from "../../../components/LandingComponent";
+
 export default function DriverDashboard() {
 
 
@@ -23,6 +25,11 @@ export default function DriverDashboard() {
     } = useGetDashBoardData();
 
     const { ExportData, ExportPending } = useGetMonthlySalary()
+
+
+    if (isPending) {
+        return <Preloader />
+    }
 
     return (
         <div className=" bg-gray-50">

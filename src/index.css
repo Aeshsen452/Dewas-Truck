@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #ffff;
+    overflow-x: hidden;
+}
+
 
 .loader {
     --color-1: #f1f5f9;
@@ -333,4 +342,89 @@
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.animate-page {
+    animation: pageReveal 1s ease forwards;
+}
+
+@keyframes pageReveal {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.truck-image {
+    animation: truckReveal 1.5s ease-out;
+}
+
+@keyframes truckReveal {
+    from {
+        opacity: 0;
+        transform: scale(1.15) translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+
+.loader-line {
+  width: 260px;
+  height: 3px;
+  background: #333;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+}
+
+.loader-line::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 35%;
+  background: #facc15;
+  box-shadow: 0 0 15px #facc15;
+  animation: lineMove 1.2s ease-in-out infinite;
+}
+
+@keyframes lineMove {
+  0% {
+    left: -35%;
+  }
+  100% {
+    left: 100%;
+  }
 }
